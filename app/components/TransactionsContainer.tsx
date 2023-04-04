@@ -1,0 +1,75 @@
+import { StyleSheet, View } from "react-native";
+import { useCallback, useState } from "react";
+import { database } from "../services/DbServices";
+import { useFocusEffect } from "@react-navigation/native";
+import { AmountSummary } from '../components/AmountSummary';
+import { BurndownChart } from '../components/BurndownChart';
+import { LatestTransactions } from '../components/LatestTransactions';
+
+export function TransactionsContainer() {
+
+    const [remainingAmount, setRemainingAmount] = useState(0);
+    const [amountPerDay, setAmountPerDay] = useState(0);
+    const [expectedRemainingAmountPerDay, setExpectedRemainingAmountPerDay] = useState([]);
+    const [realRemainingAmountPerDay, setRealRemainingAmountPerDay] = useState([]);
+    const [dailyTransactions, setDailyTransactions] = useState([]);
+
+    const getRemainingAmount = async () => {
+        console.log("> getRemainingAmount")
+        const dailyTransactions = await database.GetDailyTransactions();
+        setDailyTransactions(dailyTransactions);
+        const remainingAmount = Number(await database.GetRemainingMonthlyAmount());
+        setRemainingAmount(remainingAmount);
+        const dailyAmount = await database.GetDailyAmount();
+
+        let today = new Date();
+        let numberOfDays = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+        const amountPerDay = Number((remainingAmount / numberOfDays).toFixed(2));
+        setAmountPerDay(amountPerDay);
+
+        let remainingAmountPerDay = [];
+        let realRemainingAmountPerDay = [];
+        for (let i = 0; i < numberOfDays; ++i) {
+            remainingAmountPerDay.push(remainingAmount - (i * amountPerDay));
+        }
+
+        let dailyTransactionsIndex = 0;
+        let stackedRemainingAmountPerDay = remainingAmount;
+        for (let i = 0; i < today.getDate(); ++i) {
+            console.log(i)
+            const trans = dailyAmount[dailyTransactionsIndex];
+            console.log(trans?.date.getDate())
+            if (trans?.date.getDate() == i + 1) {
+                ++dailyTransactionsIndex;
+                stackedRemainingAmountPerDay = stackedRemainingAmountPerDay + Number(trans.amount);
+                realRemainingAmountPerDay.push(stackedRemainingAmountPerDay);
+            } else {
+                realRemainingAmountPerDay.push(stackedRemainingAmountPerDay);
+            }
+        }
+        setExpectedRemainingAmountPerDay(remainingAmountPerDay);
+        setRealRemainingAmountPerDay(realRemainingAmountPerDay);
+    }
+
+    useFocusEffect(
+        useCallback(() => {
+            getRemainingAmount();
+            return () => { };
+        }, [])
+    );
+
+    return (
+        <View style={{ flex: 1, justifyContent: "center"}}>
+            <AmountSummary 
+                remainingAmount={remainingAmount} 
+                amountPerDay={amountPerDay} 
+                expectedRemainingAmountPerDay={expectedRemainingAmountPerDay}
+                realRemainingAmountPerDay={realRemainingAmountPerDay} />
+            <BurndownChart
+                expectedRemainingAmountPerDay={expectedRemainingAmountPerDay}
+                realRemainingAmountPerDay={realRemainingAmountPerDay} />
+            <LatestTransactions dailyTransactions={dailyTransactions}/>
+        </View>
+    );
+}
+
