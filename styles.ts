@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
         color: "#fff"
     },
     roundTabButton: {
-        backgroundColor: "#fff",
+        backgroundColor: "#e91e63",
         borderRadius: 40,
         elevation: 6,
         paddingVertical: 10,
@@ -38,23 +38,24 @@ export const styles = StyleSheet.create({
         marginBottom: 50
     },
     actionText: {
-        color: "#525174",
+        color: "#303030",
         fontSize: 20,
         textAlign: "center",
     },
     content: {
-        backgroundColor: "#525174",
+        backgroundColor: "#303030",
         flex: 1
     },
     bgDark: {
         // backgroundColor: "#525174",
-        backgroundColor: "#525174",
+        backgroundColor: "#303030",
         // backgroundColor: "#513B56",
         // backgroundColor: "#348AA7",
     },
     menuBar: {
         // flex: 1,
-        height: 50,
+        flexDirection: "row",
+        // height: 50,
         // backgroundColor: "#74B3CE",
         // backgroundColor: "#525174",
         backgroundColor: "#fff",

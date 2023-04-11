@@ -11,6 +11,12 @@ export function MenuBar( {navigation} ) {
     return (
       <View style={styles.menuBar}>
           <Pressable style={[styles.roundTabButton ]} onPress={ () => openRecurringConfigurationPage() }>
+            <Text style={ styles.roundTabButtonText }>Ajout dépense</Text>
+          </Pressable >
+          <Pressable style={[styles.roundTabButton ]} onPress={ () => openRecurringConfigurationPage() }>
+            <Text style={ styles.roundTabButtonText }>Ajout revenu</Text>
+          </Pressable >
+          <Pressable style={[styles.roundTabButton ]} onPress={ () => openRecurringConfigurationPage() }>
               <Text style={ styles.roundTabButtonText }>Transactions régulieres</Text>
           </Pressable >
       </View>

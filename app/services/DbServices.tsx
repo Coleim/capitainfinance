@@ -44,10 +44,10 @@ export namespace database {
         console.log("CreateDatabase lol")
         await db.transaction(async connection => {
             await connection.execute(
-                `DROP TABLE recurring;`
+                `DROP TABLE IF EXISTS recurring;`
             );
             await connection.execute(
-                `DROP TABLE daily_transactions;`
+                `DROP TABLE IF EXISTS daily_transactions;`
             );
             await connection.execute(
                 `CREATE TABLE IF NOT EXISTS recurring (
@@ -104,11 +104,11 @@ export namespace database {
             UUID = Crypto.randomUUID();
             await connection.execute(`INSERT INTO recurring VALUES( '${UUID}', '123', 'Nounou', '-710', 'Enfants', null, null) `);
             UUID = Crypto.randomUUID();
-            await connection.execute(`INSERT INTO recurring VALUES( '${UUID}', '123', 'Assurance auto Sybille', '-63', 'Véhicules', null, null) `);
+            await connection.execute(`INSERT INTO recurring VALUES( '${UUID}', '123', 'Assurance auto Sybille', '-65', 'Véhicules', null, null) `);
             UUID = Crypto.randomUUID();
             await connection.execute(`INSERT INTO recurring VALUES( '${UUID}', '123', 'Assurance auto Clément', '-198', 'Véhicules', null, null) `);
             UUID = Crypto.randomUUID();
-            await connection.execute(`INSERT INTO recurring VALUES( '${UUID}', '123', 'Chauffage', '-14.53', 'Maison', null, null) `);
+            await connection.execute(`INSERT INTO recurring VALUES( '${UUID}', '123', 'ENGIE Home Service', '-14.53', 'Maison', null, null) `);
             UUID = Crypto.randomUUID();
             await connection.execute(`INSERT INTO recurring VALUES( '${UUID}', '123', 'Syndic', '-131', 'Maison', null, null) `);
             UUID = Crypto.randomUUID();
@@ -146,10 +146,31 @@ export namespace database {
             await connection.execute(`INSERT INTO daily_transactions VALUES( '${UUID}', '123', "2023-04-03", 'McDo', '-45.20', 'Nourriture') `);
             UUID = Crypto.randomUUID();
             await connection.execute(`INSERT INTO daily_transactions VALUES( '${UUID}', '123', "2023-04-04", 'Super U', '-10.14', 'Nourriture') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions VALUES( '${UUID}', '123', "2023-04-04", 'Amazon', '-16.99', 'Amazon') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions VALUES( '${UUID}', '123', "2023-04-04", 'Amazon', '-16.99', 'Amazon') `);
             
             UUID = Crypto.randomUUID();
-            await connection.execute(`INSERT INTO daily_transactions VALUES( '${UUID}', '123', "2023-04-04", 'Super U', '-7.40', 'Nourriture') `);
+            await connection.execute(`INSERT INTO daily_transactions VALUES( '${UUID}', '123', "2023-04-05", 'Super U', '-7.40', 'Nourriture') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions VALUES( '${UUID}', '123', "2023-04-05", 'Chevaliers', '-52', 'Loisir') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions VALUES( '${UUID}', '123', "2023-04-05", 'Amazon', '-49.90', 'Amazon') `);
 
+            
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions VALUES( '${UUID}', '123', "2023-04-06", 'Cheque', '-8.00', 'Cheque') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions VALUES( '${UUID}', '123', "2023-04-06", 'Casino', '-1.98', 'Nourriture') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions VALUES( '${UUID}', '123', "2023-04-06", 'Loutfi', '-9.07', 'Nourriture') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions VALUES( '${UUID}', '123', "2023-04-06", 'Casino', '-12.59', 'Nourriture') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions VALUES( '${UUID}', '123', "2023-04-06", 'Boulangerie', '-18.20', 'Nourriture') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions VALUES( '${UUID}', '123', "2023-04-06", 'Kiabi', '-38.50', 'Habits') `);
 
         });
         console.log("CreateDatabase end")
@@ -196,17 +217,17 @@ export namespace database {
         return resArray;
     }
 
-    export const UpdateRecurringTransactions = async (transaction_id, label, amount, category) => {
+    export const UpdateRecurringTransactions = async (transaction_id, label, amount) => {
         console.log("> UpdateRecurringTransactions ", transaction_id)
         if(transaction_id) {
             await db.transaction(async connection => {
-                await connection.execute(`UPDATE recurring SET label = ?, amount = ?, category = ? WHERE transaction_id = ? ;`, 
+                await connection.execute(`UPDATE recurring SET label = ?, amount = ? WHERE transaction_id = ? ;`, 
                     [label, amount, category, transaction_id]);
             });
         } else {
             await db.transaction(async connection => {
                 const UUID = Crypto.randomUUID();
-                await connection.execute(`INSERT INTO recurring VALUES( '${UUID}', '123', ?, ?, ?, null, null) `, [ label, amount, category]);
+                await connection.execute(`INSERT INTO recurring VALUES( '${UUID}', '123', ?, ?, 'OTHER', null, null) `, [ label, amount]);
             });
         }        
     }

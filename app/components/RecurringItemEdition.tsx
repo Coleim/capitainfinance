@@ -14,7 +14,7 @@ export function RecurringItemEdition(props) {
   const [amountStr, setAmountStr] = useState(item.amount.toString());
   const [isLimited, setIsLimited] = useState(false);
   const [startDate, setStartDate] = useState(item.startDate);
-  const [category, setCategory] = useState(item.category);
+  // const [category, setCategory] = useState(item.category);
   const [label, setLabel] = useState(item.label);
   const [modalVisible, setModalVisible] = useState(false);
   const [saveDisabled, setSaveDisabled] = useState(true);
@@ -23,7 +23,7 @@ export function RecurringItemEdition(props) {
 
   useEffect(() => {
     console.log(">> useEffect")
-    if (amountStr && label && category) {
+    if (amountStr && label) {
       setSaveDisabled(false);
     } else {
       setSaveDisabled(true);
@@ -36,7 +36,7 @@ export function RecurringItemEdition(props) {
     console.log("> saveItem");
     if (validateAmountNumber() && !saveDisabled) {
       let amount = getCorrectNumber();
-      await database.UpdateRecurringTransactions(item.transaction_id, label, amount.toFixed(2), category);
+      await database.UpdateRecurringTransactions(item.transaction_id, label, amount.toFixed(2));
       navigation.navigate("RecurringConfigurationPage");
     }
   }
