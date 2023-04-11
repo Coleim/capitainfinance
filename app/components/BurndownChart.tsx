@@ -51,7 +51,7 @@ export function BurndownChart(props) {
 
   return (
     <View style={ { alignSelf: "center"}}>
-      {/* <LineChart
+      <LineChart
         data={{
           labels: days,
           datasets: [
@@ -88,7 +88,7 @@ export function BurndownChart(props) {
           marginVertical: 8,
           borderRadius: 8
         }}
-      /> */}
+      />
     </View>
   );
 }

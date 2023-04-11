@@ -10,14 +10,15 @@ export function EditRecurringTransactionItemPage( { route } ) {
 
     console.log(route.params)
 
-    const item: database.RecurringTransaction = route.params.item ?? {
+    const item: database.Transaction = route.params.item ?? {
         transaction_id: undefined,
         owner_id: undefined,
         label: "",
         amount: 0,
         category: "",
-        startDate: null,
-        endDate: null
+        date: null,
+        endDate: null,
+        isReccuring: true
     };
     const isExpense: boolean = route.params.isExpense;
     

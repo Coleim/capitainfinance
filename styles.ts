@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
         color: "#fff"
     },
     roundTabButton: {
-        backgroundColor: "#e91e63",
+        backgroundColor: "#607d8b",
         borderRadius: 40,
         elevation: 6,
         paddingVertical: 10,
@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
         marginLeft: 5
     },
     roundTabButtonSelected: {
-        backgroundColor: "#74b3ce",
+        backgroundColor: "#e91e63",
     },
     roundTabButtonText: {
 

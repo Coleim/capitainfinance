@@ -4,7 +4,7 @@ import { RecurringItem } from "./RecurringItem";
 import { database } from "../services/DbServices";
 
 export function RecurringTransactions(props) {
-  const transactions: database.RecurringTransaction[] = props.transactions;
+  const transactions: database.Transaction[] = props.transactions;
   const isExpense: boolean = props.isExpense;
   
   return (

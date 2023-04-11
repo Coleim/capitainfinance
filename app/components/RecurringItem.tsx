@@ -19,7 +19,7 @@ export function RecurringItem(props) {
             <View style={ { flexDirection: "row", alignItems: "center"}}>
                 <View style={ { flexDirection: "column"} }>
                     <Text style={ { color: "#525174", fontSize: 15 } } >{item.label}</Text>
-                    {item.startDate && <Text style={ { fontSize: 10 } } >du { date.AsString(item.startDate) } au { date.AsString(item.endDate) } </Text>}
+                    {item.date && <Text style={ { fontSize: 10 } } >du { date.AsString(item.date) } au { date.AsString(item.endDate) } </Text>}
                 </View>
                 <Text style={ [{ marginLeft: "auto", fontWeight: "bold" }, item.amount > 0 ? {color: "#06d6a0"}: {color: "#ef476f"}] } >{item.amount} €</Text>
             </View>

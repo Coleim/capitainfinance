@@ -8,12 +8,12 @@ import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import Checkbox from 'expo-checkbox';
 
 export function RecurringItemEdition(props) {
-  const item: database.RecurringTransaction = props.item;
+  const item: database.Transaction = props.item;
   const isExpense: boolean = props.isExpense;
 
   const [amountStr, setAmountStr] = useState(item.amount.toString());
   const [isLimited, setIsLimited] = useState(false);
-  const [startDate, setStartDate] = useState(item.startDate);
+  const [startDate, setStartDate] = useState(item.date);
   // const [category, setCategory] = useState(item.category);
   const [label, setLabel] = useState(item.label);
   const [modalVisible, setModalVisible] = useState(false);
@@ -36,13 +36,17 @@ export function RecurringItemEdition(props) {
     console.log("> saveItem");
     if (validateAmountNumber() && !saveDisabled) {
       let amount = getCorrectNumber();
-      await database.UpdateRecurringTransactions(item.transaction_id, label, amount.toFixed(2));
-      navigation.navigate("RecurringConfigurationPage");
+      if(item.isReccuring) {
+        await database.UpdateRecurringTransactions(item.transaction_id, label, amount.toFixed(2));
+        navigation.navigate("RecurringConfigurationPage");
+      }
     }
   }
 
   function cancel(): void {
-    navigation.navigate("RecurringConfigurationPage");
+    if(item.isReccuring) {
+      navigation.navigate("RecurringConfigurationPage");
+    }
   }
 
   const onStartDateChange = (event, selectedDate) => {
@@ -94,8 +98,10 @@ export function RecurringItemEdition(props) {
   async function removeTransaction() {
     console.log("removeTransaction: ", item.transaction_id);
     setModalVisible(false);
-    await database.DeleteRecurringTransactions(item.transaction_id);
-    navigation.navigate("RecurringConfigurationPage");
+    if(item.isReccuring) {
+      await database.DeleteRecurringTransactions(item.transaction_id);
+      navigation.navigate("RecurringConfigurationPage");
+    }
   }
 
   return (

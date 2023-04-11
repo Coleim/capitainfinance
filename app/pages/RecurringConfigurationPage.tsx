@@ -8,7 +8,6 @@ import { useCallback, useEffect, useState } from "react";
 import { database } from "../services/DbServices";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { RecurringTransactions } from "../components/RecurringTransactions";
-import { RecurringExpenses } from "../components/RecurringExpenses";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
 
