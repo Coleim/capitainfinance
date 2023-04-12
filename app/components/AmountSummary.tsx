@@ -6,13 +6,15 @@ import { date } from "../services/DateAsString";
 
 export function AmountSummary(props) {
 
+  const today = new Date();
+
   const remainingAmount = props.remainingAmount;
   const amountPerDay = props.amountPerDay;
-
-  const expectedRemainingAmountPerDay = props.expectedRemainingAmountPerDay;
+  const dailyAmountSpent = props.monthlyAmountSpent / today.getDate();
+  
+  // const expectedRemainingAmountPerDay = props.expectedRemainingAmountPerDay;
   const realRemainingAmountPerDay = props.realRemainingAmountPerDay;
   
-  const today = new Date();
   let numberOfDaysUntilEndOfMonth = (new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate() - today.getDate()) + 1;
   
   const remainingAmountAsPerToday = realRemainingAmountPerDay.at(today.getDate()-1);
@@ -27,6 +29,8 @@ export function AmountSummary(props) {
       <Text style={styles.white}> Restant pour {date.GetMonthAsString(today)} aujourd'hui </Text>
       <Text style={styles.white}> { remainingAmountAsPerToday?.toFixed(2) } €</Text>
       <Text style={styles.white}> Soit { amountPerDayUntilEndOfMonth } € par jour </Text>
+      <Text style={styles.white}> Vous avez dépensé { dailyAmountSpent?.toFixed(2) } € par jour </Text>
+      
     </View>
   );
 }

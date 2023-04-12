@@ -10,12 +10,14 @@ export function TransactionsContainer() {
 
     const [remainingAmount, setRemainingAmount] = useState(0);
     const [amountPerDay, setAmountPerDay] = useState(0);
+    const [monthlyAmountSpent, setMonthlyAmountSpent] = useState(0);
     const [expectedRemainingAmountPerDay, setExpectedRemainingAmountPerDay] = useState([]);
     const [realRemainingAmountPerDay, setRealRemainingAmountPerDay] = useState([]);
     const [dailyTransactions, setDailyTransactions] = useState([]);
 
-    const getRemainingAmount = async () => {
-        console.log("> getRemainingAmount")
+    const getRemainingAmount = async () => {        
+        const monthlyAmountSpent = await database.GetMonthlyAmountSpent();
+        setMonthlyAmountSpent(monthlyAmountSpent);
         const dailyTransactions = await database.GetDailyTransactions();
         setDailyTransactions(dailyTransactions);
         const remainingAmount = Number(await database.GetRemainingMonthlyAmount());
@@ -36,9 +38,7 @@ export function TransactionsContainer() {
         let dailyTransactionsIndex = 0;
         let stackedRemainingAmountPerDay = remainingAmount;
         for (let i = 0; i < today.getDate(); ++i) {
-            console.log(i)
             const trans = dailyAmount[dailyTransactionsIndex];
-            console.log(trans?.date.getDate())
             if (trans?.date.getDate() == i + 1) {
                 ++dailyTransactionsIndex;
                 stackedRemainingAmountPerDay = stackedRemainingAmountPerDay + Number(trans.amount);
@@ -62,7 +62,8 @@ export function TransactionsContainer() {
         <View style={{ flex: 1, justifyContent: "center"}}>
             <AmountSummary 
                 remainingAmount={remainingAmount} 
-                amountPerDay={amountPerDay} 
+                amountPerDay={amountPerDay}
+                monthlyAmountSpent={monthlyAmountSpent}
                 expectedRemainingAmountPerDay={expectedRemainingAmountPerDay}
                 realRemainingAmountPerDay={realRemainingAmountPerDay} />
             <BurndownChart

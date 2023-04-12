@@ -8,8 +8,6 @@ import { RecurringItemEdition } from "../components/RecurringItemEdition";
 
 export function EditRecurringTransactionItemPage( { route } ) {
 
-    console.log(route.params)
-
     const item: database.Transaction = route.params.item ?? {
         transaction_id: undefined,
         owner_id: undefined,

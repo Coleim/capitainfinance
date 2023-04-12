@@ -41,7 +41,6 @@ export namespace database {
     }
 
     export const CreateDatabase = async () => {
-        console.log("CreateDatabase lol")
         await db.transaction(async connection => {
             await connection.execute(
                 `DROP TABLE IF EXISTS recurring;`
@@ -61,7 +60,6 @@ export namespace database {
                   );`
             );
 
-            
             await connection.execute(
                 `CREATE TABLE IF NOT EXISTS daily_transactions (
                     transaction_id TEXT PRIMARY KEY NOT NULL,
@@ -73,10 +71,8 @@ export namespace database {
                   );`
             );
 
-
             let UUID = Crypto.randomUUID();
             
-
             await connection.execute(`INSERT INTO recurring (transaction_id,owner_id,label,amount,category,startDate,endDate) VALUES( '${UUID}', '123', 'Salaire Clement', '3100', 'SALARY', null, null) `);
             UUID = Crypto.randomUUID();
             await connection.execute(`INSERT INTO recurring (transaction_id,owner_id,label,amount,category,startDate,endDate) VALUES( '${UUID}', '123', 'Salaire Sybille', '1700', 'SALARY', null, null) `);
@@ -127,15 +123,14 @@ export namespace database {
             await connection.execute(`INSERT INTO recurring (transaction_id,owner_id,label,amount,category,startDate,endDate) VALUES( '${UUID}', '123', 'Disney+', '-9', 'Loisir', null, null) `);
             UUID = Crypto.randomUUID();
             await connection.execute(`INSERT INTO recurring (transaction_id,owner_id,label,amount,category,startDate,endDate) VALUES( '${UUID}', '123', 'Internet', '-45', 'Maison', null, null) `);
-
-            
             UUID = Crypto.randomUUID();
-            await connection.execute(`INSERT INTO recurring (transaction_id,owner_id,label,amount,category,startDate,endDate) VALUES( '${UUID}', '123', 'Nourriture', '-400', 'Maison', null, null) `);
+            await connection.execute(`INSERT INTO recurring (transaction_id,owner_id,label,amount,category,startDate,endDate) VALUES( '${UUID}', '123', 'PEL', '-45', 'Maison', null, null) `);
+
             UUID = Crypto.randomUUID();
             await connection.execute(`INSERT INTO recurring (transaction_id,owner_id,label,amount,category,startDate,endDate) VALUES( '${UUID}', '123', 'Epargne', '-400', 'Maison', null, null) `);
 
 
-            
+            /////////////////////////////////////////
 
 
             UUID = Crypto.randomUUID();
@@ -167,41 +162,70 @@ export namespace database {
             await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-06", 'Cheque', '-8.00', 'Cheque') `);
             UUID = Crypto.randomUUID();
             await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-06", 'Casino', '-1.98', 'Nourriture') `);
-            UUID = Crypto.randomUUID();
-            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-06", 'Loutfi', '-9.07', 'Nourriture') `);
-            UUID = Crypto.randomUUID();
-            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-06", 'Casino', '-12.59', 'Nourriture') `);
-            UUID = Crypto.randomUUID();
-            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-06", 'Boulangerie', '-18.20', 'Nourriture') `);
-            UUID = Crypto.randomUUID();
-            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-06", 'Kiabi', '-38.50', 'Habits') `);
 
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Loutfi', '-9.07', 'Nourriture') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Boulangerie', '-18.20', 'Nourriture') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Casino', '-12.59', 'Nourriture') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Carfeour', '-9.59', 'Nourriture') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Interets debiteurs', '-0.03', 'Banque') `);
+
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Kiabi', '-38.50', 'Habits') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Casino', '-10.86', 'Nourriture') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Blaimont', '-75.00', 'Santé') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Kiabi', '-7.00', 'Habits') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Carrefour', '-9.14', 'Nourriture') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Pharmacie', '-29.49', 'Santé') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Cinéma', '-15.99', 'Loisir') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Cinéma', '-13.70', 'Loisir') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Carrefour', '-116.74', 'Nourriture') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Snack People', '-28.00', 'Nourriture') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Casino', '-13.40', 'Nourriture') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Escota', '-16.80', 'Vehicules') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Escota', '-16.80', 'Vehicules') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Escota', '-8.80', 'Vehicules') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Escota', '-8.70', 'Vehicules') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Amazon', '-3.28', 'Amazon') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-11", 'Super U', '-9.65', 'Nourriture') `);
         });
-        console.log("CreateDatabase end")
     }
     
     export const HasRecurringTable = async () => {
-        console.log("HasRecurringTable start")
         let returnVal = false;
         await db.transaction(async connection => {
             const res = await connection.execute(`SELECT count(*) FROM sqlite_master WHERE type='table' AND name='recurring';`);
-            console.log("Count: " , res.rows.at(0)["count(*)"])
             returnVal = (res.rows.at(0)["count(*)"] > 0);
         });
-        console.log("returnVal: ", returnVal)
-        console.log("HasRecurringTable end")
         return returnVal;
     }
 
     export const HasRecurringTransactions = async () => {
-        console.log(">> HasRecurringTransactions ")
         const res = await db.execute('select count(*) from recurring;');
-        console.log("Count: " , res.rows.at(0)["count(*)"])
         return (res.rows.at(0)["count(*)"] > 0);
     }
 
     export const GetRecurringTransactions = async () => {
-        console.log(">> GetRecurringTransactions ")
         let resArray = [];
         await db.transaction(async connection => {
             const res = await connection.execute('select transaction_id, owner_id, label, amount, category, startDate, endDate from recurring;');
@@ -223,7 +247,6 @@ export namespace database {
     }
 
     export const UpdateRecurringTransactions = async (transaction_id, label, amount) => {
-        console.log("> UpdateRecurringTransactions ", transaction_id)
         if(transaction_id) {
             await db.transaction(async connection => {
                 await connection.execute(`UPDATE recurring SET label = ?, amount = ? WHERE transaction_id = ? ;`, 
@@ -239,7 +262,6 @@ export namespace database {
 
     
     export const GetRemainingMonthlyAmount = async () => {
-        console.log(">> GetRemainingMonthlyAmount")
         let remainingMonthlyAmount = 0;
         await db.transaction(async connection => {
             const res = await connection.execute(`SELECT amount FROM recurring ;`);
@@ -250,13 +272,21 @@ export namespace database {
         return remainingMonthlyAmount.toFixed(2);
     }
 
-    export const GetDailyAmount = async () => {
-        console.log(">> GetDailyAmount")
+    export const GetMonthlyAmountSpent = async () => {
+        let monthlyAmountSpent = 0;
+        await db.transaction(async connection => {
+            const res = await connection.execute(`SELECT amount FROM daily_transactions ;`);
+            res.rows.forEach(row => {
+                monthlyAmountSpent += Number(row.amount)
+            });
+        });
+        return monthlyAmountSpent.toFixed(2);
+    }
 
+    export const GetDailyAmount = async () => {
         let remainingMonthlyAmount = [];
         await db.transaction(async connection => {
             const res = await connection.execute(`SELECT date, SUM(amount) as amount FROM daily_transactions GROUP BY date ORDER BY date ;`);
-            console.log(res)
             res.rows.forEach(row => {
                 remainingMonthlyAmount.push({
                     date: new Date(row.date),
@@ -264,19 +294,14 @@ export namespace database {
                 });
             });
         });
-
         return remainingMonthlyAmount;
     }
 
-    
     export const GetDailyTransactions = async () => {
-        console.log(">> GetDailyTransactions")
-
         let dailyTransactions = [];
         await db.transaction(async connection => {
 
             const res = await connection.execute(`SELECT transaction_id, owner_id, date, amount, label, category FROM daily_transactions ORDER BY date DESC ;`);
-            console.log(res)
             res.rows.forEach(row => {
                 let trans: Transaction = {
                     transaction_id: row.transaction_id,
@@ -294,10 +319,8 @@ export namespace database {
     }
 
     export const DeleteRecurringTransactions = async (transaction_id) => {
-        console.log(">> DeleteRecurringTransactions")
         await db.transaction(async connection => {
             const res = await connection.execute(`DELETE FROM recurring WHERE transaction_id = ? ;`, [ transaction_id ]);
-            console.log(res)
         });
     }
 

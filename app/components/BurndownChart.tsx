@@ -15,7 +15,6 @@ export function BurndownChart(props) {
   const expectedRemainingAmountPerDay = props.expectedRemainingAmountPerDay;
   const realRemainingAmountPerDay = props.realRemainingAmountPerDay;
 
-
   const [days, setDays] = useState([] as string[]);
   const [hidePointsAt, setHidePointsAt] = useState([] as number[]);
   
@@ -51,44 +50,46 @@ export function BurndownChart(props) {
 
   return (
     <View style={ { alignSelf: "center"}}>
-      <LineChart
-        data={{
-          labels: days,
-          datasets: [
-            {
-              data: expectedRemainingAmountPerDay,
-              color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`
-            }, 
-            { data: realRemainingAmountPerDay }
-          ]
-        }}
-        width={Dimensions.get("window").width - 20} // from react-native
-        height={220}
-        yAxisSuffix="€"
-        hidePointsAtIndex={ hidePointsAt }
-        yAxisInterval={5}
-        chartConfig={{
-          backgroundGradientFrom: "#fff",
-          backgroundGradientTo: "#fff",
-          decimalPlaces: 2,
-          fillShadowGradientFrom: "#fff",
-          fillShadowGradientTo: "#fff",
-          color: (opacity = 1) => `rgba(100, 100, 255, 1)`,
-          labelColor: (opacity = 1) => `rgba(0, 0, 0, 1)`,
-          propsForBackgroundLines: {
-            strokeOpacity: 0.3
-          },
-          useShadowColorFromDataset: true,
-          propsForDots: {
-            r: "0",
-            strokeWidth: "0",
-          }
-        }}
-        style={{
-          marginVertical: 8,
-          borderRadius: 8
-        }}
-      />
+      { (expectedRemainingAmountPerDay.length > 0 && realRemainingAmountPerDay.length > 0) && 
+        <LineChart
+          data={{
+            labels: days,
+            datasets: [
+              {
+                data: expectedRemainingAmountPerDay,
+                color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`
+              }, 
+              { data: realRemainingAmountPerDay }
+            ]
+          }}
+          width={Dimensions.get("window").width - 20} // from react-native
+          height={220}
+          yAxisSuffix="€"
+          hidePointsAtIndex={ hidePointsAt }
+          yAxisInterval={5}
+          chartConfig={{
+            backgroundGradientFrom: "#fff",
+            backgroundGradientTo: "#fff",
+            decimalPlaces: 2,
+            fillShadowGradientFrom: "#fff",
+            fillShadowGradientTo: "#fff",
+            color: (opacity = 1) => `rgba(100, 100, 255, 1)`,
+            labelColor: (opacity = 1) => `rgba(0, 0, 0, 1)`,
+            propsForBackgroundLines: {
+              strokeOpacity: 0.3
+            },
+            useShadowColorFromDataset: true,
+            propsForDots: {
+              r: "0",
+              strokeWidth: "0",
+            }
+          }}
+          style={{
+            marginVertical: 8,
+            borderRadius: 8
+          }}
+        />
+      }
     </View>
   );
 }

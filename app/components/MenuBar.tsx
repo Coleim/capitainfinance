@@ -4,7 +4,6 @@ import { styles } from '../../styles';
 export function MenuBar( {navigation} ) {
   
   function openRecurringConfigurationPage(): void {
-      console.log("openRecurringConfigurationPage");
       navigation.navigate('RecurringConfigurationPage');
   }
 

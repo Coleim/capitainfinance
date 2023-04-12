@@ -5,7 +5,7 @@ import { date } from "../services/DateAsString";
 import { useNavigation } from '@react-navigation/native';
 
 export function DailyTransactionItem(props) {
-    const item: database.DailyTransaction = props.item;
+    const item: database.Transaction = props.item;
     const navigation = useNavigation();
     function editItem(): void {
         // navigation.navigate('EditRecurringTransactionItemPage', { item });

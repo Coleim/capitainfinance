@@ -15,13 +15,11 @@ export function HomePage( {navigation} ) {
             // await database.CreateDatabase();
             // database.CloseDb();
             const hasRecurring = await database.HasRecurringTable();
-            console.log("hasRecurring: " , hasRecurring)
             if(!hasRecurring) {
                 await database.CreateDatabase();
                 navigation.navigate('RecurringConfigurationPage');
             } else {
                 const hasRecurringTransactions = await database.HasRecurringTransactions();
-                console.log("hasRecurringTransactions: " , hasRecurringTransactions)
                 if(!hasRecurringTransactions) {
                     navigation.navigate('RecurringConfigurationPage');
                 } else {

@@ -22,7 +22,6 @@ export function RecurringItemEdition(props) {
   const navigation = useNavigation();
 
   useEffect(() => {
-    console.log(">> useEffect")
     if (amountStr && label) {
       setSaveDisabled(false);
     } else {
@@ -33,7 +32,6 @@ export function RecurringItemEdition(props) {
 
 
   async function saveItem(): Promise<void> {
-    console.log("> saveItem");
     if (validateAmountNumber() && !saveDisabled) {
       let amount = getCorrectNumber();
       if(item.isReccuring) {
@@ -63,10 +61,7 @@ export function RecurringItemEdition(props) {
   };
 
   const getCorrectNumber = () => {
-    console.log("getCorrectNumber : ", amountStr)
     let amountNbr = Math.abs(Number(amountStr));
-    console.log("amountNbr : ", amountNbr)
-
     if (isExpense) {
       amountNbr *= -1;
     }
@@ -76,8 +71,6 @@ export function RecurringItemEdition(props) {
 
 
   const validateAmountNumber = () => {
-    console.log("validateAmountNumber ")
-
     let amountNbr = getCorrectNumber();
     if (Number.isNaN(amountNbr)) {
       setAmountStr(item.amount.toFixed(2));
@@ -90,13 +83,11 @@ export function RecurringItemEdition(props) {
 
 
   async function openConfirmModal(): Promise<void> {
-    console.log("> openConfirmModal")
     setModalVisible(true);
   }
 
 
   async function removeTransaction() {
-    console.log("removeTransaction: ", item.transaction_id);
     setModalVisible(false);
     if(item.isReccuring) {
       await database.DeleteRecurringTransactions(item.transaction_id);

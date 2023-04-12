@@ -14,7 +14,7 @@ export namespace date {
         const yyyy = date.getFullYear();
         let dd = date.getDate();
         let mm = date.getMonth() + 1;
-        let dateStr;
+        let dateStr = '';
         if (dd < 10) {
             dateStr = '0';
         }

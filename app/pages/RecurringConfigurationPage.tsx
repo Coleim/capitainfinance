@@ -48,8 +48,6 @@ export function RecurringConfigurationPage( {navigation} ) {
 
     function addNewTransaction(): void {
         let isExpense = selectedTab == 2;
-        console.log("selectedTab  " , selectedTab)
-        console.log("isExpense  " , isExpense)
         navigation.navigate('EditRecurringTransactionItemPage', { item: null, isExpense } );
     }
 
