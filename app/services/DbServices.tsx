@@ -227,14 +227,26 @@ export namespace database {
             UUID = Crypto.randomUUID();
             await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-13", 'Remboursement Mutuelle', '13.60', 'Santé') `);
             UUID = Crypto.randomUUID();
-            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-14", 'Okaidi', '-33.96', 'Habits') `);
-            UUID = Crypto.randomUUID();
-            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-14", 'Kokubu', '-46.04', 'Loisir') `);
-            UUID = Crypto.randomUUID();
             await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-14", 'Remboursement Mutuelle', '50.15', 'Santé') `);
 
             UUID = Crypto.randomUUID();
-            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-15", 'LaPoste', '7.84', 'LaPoste') `);
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-17", 'Okaidi', '-33.96', 'Habits') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-17", 'Kokubu', '-46.04', 'Loisir') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-17", 'LaPoste', '-7.84', 'LaPoste') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-17", 'Okaidi', '12', 'Habits') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-17", 'Carrefour', '-21.19', 'Nourriture') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-17", 'Kokubu', '-52.00', 'Loisir') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-17", 'Carrefour', '-20.64', 'Nourriture') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-17", 'Casino', '-23.07', 'Nourriture') `);
+            UUID = Crypto.randomUUID();
+            await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-17", 'Casino', '-26.03', 'Nourriture') `);
 
 
         });
