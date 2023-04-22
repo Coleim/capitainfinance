@@ -10,7 +10,7 @@ export function AmountSummary(props) {
 
   const remainingAmount = props.remainingAmount;
   const amountPerDay = props.amountPerDay;
-  const dailyAmountSpent = props.monthlyAmountSpent / today.getDate();
+  const dailyAmountSpent = -1*(props.monthlyAmountSpent / today.getDate());
   
   // const expectedRemainingAmountPerDay = props.expectedRemainingAmountPerDay;
   const realRemainingAmountPerDay = props.realRemainingAmountPerDay;
@@ -26,7 +26,7 @@ export function AmountSummary(props) {
       <Text style={styles.white}> Reste à vivre total pour {date.GetMonthAsString(today)} {remainingAmount} €</Text>
       <Text style={styles.white}> Soit {amountPerDay.toFixed(2)} € par jour </Text>
 
-      <Text style={styles.white}> Restant pour {date.GetMonthAsString(today)} aujourd'hui </Text>
+      <Text style={styles.white}> Restant pour {date.GetMonthAsString(today)} </Text>
       <Text style={styles.white}> { remainingAmountAsPerToday?.toFixed(2) } €</Text>
       <Text style={styles.white}> Soit { amountPerDayUntilEndOfMonth } € par jour </Text>
       <Text style={styles.white}> Vous avez dépensé { dailyAmountSpent?.toFixed(2) } € par jour </Text>

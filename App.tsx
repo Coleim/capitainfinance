@@ -10,6 +10,7 @@ import { EditRecurringTransactionItemPage } from './app/pages/EditRecurringTrans
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Text } from "react-native";
+import { EditTransactionItemPage } from './app/pages/EditTransactionItemPage';
 
 const App = () => {
   // const Stack = createNativeStackNavigator();
@@ -31,6 +32,7 @@ const App = () => {
           <Stack.Screen name="HomePage" component={HomePage} options={ { title: "BITE" }}/>
           <Stack.Screen name="RecurringConfigurationPage" component={RecurringConfigurationPage} options={ { title: "Transactions régulières" }} />
           <Stack.Screen name="EditRecurringTransactionItemPage" component={EditRecurringTransactionItemPage} />
+          <Stack.Screen name="EditTransactionItemPage" component={EditTransactionItemPage} />
         </Stack.Navigator>
     </NavigationContainer>
     </SafeAreaProvider>

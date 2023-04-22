@@ -1,5 +1,6 @@
 // https://gist.github.com/GendelfLugansk/db31d7742c4dbc3d6d768fa525474aff?permalink_comment_id=4032306
 import * as SQLite from "expo-sqlite";
+// db upgrade: https://embusinessproducts.com/react-native-sqlite-database-upgrade-strategy/
 
 class Connection {
     constructor(databaseName) {

@@ -3,8 +3,8 @@ import { styles } from '../../styles';
 import { DailyTransactionItem } from "./DailyTransactionItem";
 
 export function LatestTransactions(props) {
+  const dailyTransactions = props.dailyTransactions;
 
-  const dailyTransactions = props.dailyTransactions;  
   return (
     
     <View style={ styles.content }>

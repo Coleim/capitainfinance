@@ -14,11 +14,12 @@ export function HomePage( {navigation} ) {
         const fetchData = async () => {
             // await database.CreateDatabase();
             // database.CloseDb();
-            const hasRecurring = await database.HasRecurringTable();
-            if(!hasRecurring) {
+            const hasVersion = await database.HasVersionTable();
+            if(!hasVersion) {
                 await database.CreateDatabase();
                 navigation.navigate('RecurringConfigurationPage');
             } else {
+                // TODO: upgrade version
                 const hasRecurringTransactions = await database.HasRecurringTransactions();
                 if(!hasRecurringTransactions) {
                     navigation.navigate('RecurringConfigurationPage');

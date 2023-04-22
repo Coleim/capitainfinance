@@ -8,7 +8,8 @@ export function DailyTransactionItem(props) {
     const item: database.Transaction = props.item;
     const navigation = useNavigation();
     function editItem(): void {
-        // navigation.navigate('EditRecurringTransactionItemPage', { item });
+        const isExpense = item.amount <= 0;
+        navigation.navigate('EditTransactionItemPage', { item, isExpense });
     }
 
     return (

@@ -23,7 +23,6 @@ export const styles = StyleSheet.create({
         backgroundColor: "#e91e63",
     },
     roundTabButtonText: {
-
     },
     button: {
         alignItems: 'center',

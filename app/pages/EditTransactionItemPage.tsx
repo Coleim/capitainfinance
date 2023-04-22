@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ItemEdition } from "../components/ItemEdition";
 
 
-export function EditRecurringTransactionItemPage( { route } ) {
+export function EditTransactionItemPage( { route } ) {
 
     const item: database.Transaction = route.params.item ?? {
         transaction_id: undefined,
@@ -16,7 +16,7 @@ export function EditRecurringTransactionItemPage( { route } ) {
         category: "",
         date: null,
         endDate: null,
-        isReccuring: true
+        isReccuring: false
     };
     const isExpense: boolean = route.params.isExpense;
     

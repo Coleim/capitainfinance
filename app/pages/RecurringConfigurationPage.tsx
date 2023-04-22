@@ -51,6 +51,10 @@ export function RecurringConfigurationPage( {navigation} ) {
         navigation.navigate('EditRecurringTransactionItemPage', { item: null, isExpense } );
     }
 
+    function back(): void {
+        navigation.navigate('HomePage');
+    }
+
     return (
         <SafeAreaView style={[styles.content]}>
             <View style={[{ flexDirection: "row", justifyContent: "center", marginTop: 20}]}>
@@ -75,6 +79,12 @@ export function RecurringConfigurationPage( {navigation} ) {
                         <Text style={ styles.actionText }> Ajouter un revenu régulier </Text> : 
                         <Text style={ styles.actionText }> Ajouter une dépense régulière </Text>
                     }
+                </Pressable>
+            </View>
+
+            <View style={ styles.vCenterContent }>
+                <Pressable style={[styles.roundTabButton, {backgroundColor: "#fff" }]} onPress={ () => back() }>
+                    <Text style={ styles.actionText }> Retour </Text>
                 </Pressable>
             </View>
         </SafeAreaView>

@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import Checkbox from 'expo-checkbox';
 
-export function RecurringItemEdition(props) {
+export function ItemEdition(props) {
   const item: database.Transaction = props.item;
   const isExpense: boolean = props.isExpense;
 
@@ -36,15 +36,23 @@ export function RecurringItemEdition(props) {
       let amount = getCorrectNumber();
       if(item.isReccuring) {
         await database.UpdateRecurringTransactions(item.transaction_id, label, amount.toFixed(2));
-        navigation.navigate("RecurringConfigurationPage");
+      } else {
+        await database.UpdateDailyTransaction(item.transaction_id, label, amount.toFixed(2));
       }
+      back();
+    }
+  }
+
+  function back() {
+    if(item.isReccuring) {
+      navigation.navigate("RecurringConfigurationPage");
+    } else {
+      navigation.navigate("HomePage");
     }
   }
 
   function cancel(): void {
-    if(item.isReccuring) {
-      navigation.navigate("RecurringConfigurationPage");
-    }
+    back();
   }
 
   const onStartDateChange = (event, selectedDate) => {
@@ -91,8 +99,10 @@ export function RecurringItemEdition(props) {
     setModalVisible(false);
     if(item.isReccuring) {
       await database.DeleteRecurringTransactions(item.transaction_id);
-      navigation.navigate("RecurringConfigurationPage");
+    } else {
+      await database.DeleteDailyTransaction(item.transaction_id);
     }
+    back();
   }
 
   return (
