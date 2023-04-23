@@ -14,8 +14,8 @@ import { useFocusEffect } from "@react-navigation/native";
   
 export function RecurringConfigurationPage( {navigation} ) {
     
-    const [expensesItems, setExpensesItems] = useState(null);
-    const [incomesItems, setIncomesItems] = useState(null);
+    const [expensesItems, setExpensesItems] = useState([]);
+    const [incomesItems, setIncomesItems] = useState([]);
 
     const [selectedTab, setSelectedTab] = useState(1);
 
@@ -33,6 +33,8 @@ export function RecurringConfigurationPage( {navigation} ) {
         })
         setExpensesItems(expenses);
         setIncomesItems(incomes);
+
+        
     }
 
     useFocusEffect(
@@ -66,12 +68,27 @@ export function RecurringConfigurationPage( {navigation} ) {
                 </Pressable>
             </View>
 
-            <View style={[styles.content, { marginTop: 10 }]}>
-                { selectedTab == 1 ? 
-                    <RecurringTransactions transactions={incomesItems} isExpense={false} ></RecurringTransactions> : 
+            { (selectedTab == 1 && incomesItems.length != 0) &&
+                <View style={[styles.content, { marginTop: 10 }]}>
+                    <RecurringTransactions transactions={incomesItems} isExpense={false} ></RecurringTransactions>
+                </View>
+            }
+            { (selectedTab != 1 && expensesItems.length != 0) &&
+                <View style={[styles.content, { marginTop: 10 }]}>
                     <RecurringTransactions transactions={expensesItems} isExpense={true} ></RecurringTransactions>
-                }
-            </View>
+                </View>
+            }
+
+            { (incomesItems.length == 0 && selectedTab == 1) &&
+                <View style={[styles.content, { marginTop: 10 }]}>
+                    <Text style={ { color: "#fff", fontSize: 25, textAlign: "center", marginLeft: "auto", marginRight: "auto", marginTop: "auto", marginBottom: "auto"} }> Entrez vos revenus régulier mensuel {"\n"} {"\n"} (Salaire, Allocations, ...) {"\n"}{"\n"} ↓</Text>
+                </View>
+            }
+            { (selectedTab != 1 && expensesItems.length == 0) &&
+                <View style={[styles.content, { marginTop: 10 }]}>
+                    <Text style={ { width: "80%", color: "#fff", fontSize: 25, textAlign: "center", marginLeft: "auto", marginRight: "auto", marginTop: "auto", marginBottom: "auto"} }> Entrez vos dépenses régulières mensuelle {"\n"} {"\n"}(Loyer, Electricité, Internet, ...) {"\n"}{"\n"} ↓</Text>
+                </View>
+            }
             
             <View style={ styles.vCenterContent }>
                 <Pressable style={styles.roundTabButton} onPress={ () => addNewTransaction() }>
@@ -83,9 +100,11 @@ export function RecurringConfigurationPage( {navigation} ) {
             </View>
 
             <View style={ styles.vCenterContent }>
-                <Pressable style={[styles.roundTabButton, {backgroundColor: "#fff" }]} onPress={ () => back() }>
-                    <Text style={ styles.actionText }> Retour </Text>
-                </Pressable>
+                { (expensesItems.length != 0 || incomesItems.length != 0) &&
+                    <Pressable style={[styles.roundTabButton, {backgroundColor: "#fff" }]} onPress={ () => back() }>
+                        <Text style={ styles.actionText }> Retour </Text>
+                    </Pressable>
+                }
             </View>
         </SafeAreaView>
     );

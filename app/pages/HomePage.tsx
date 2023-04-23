@@ -1,36 +1,47 @@
 import { ActivityIndicator, View } from "react-native";
 import { MenuBar } from '../components/MenuBar';
 import { styles } from '../../styles';
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { database } from "../services/DbServices";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TransactionsContainer } from "../components/TransactionsContainer";
+import { useFocusEffect } from "@react-navigation/native";
 
 export function HomePage( {navigation} ) {
 
     const [databaseReady, setDatabaseReady] = useState(false);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            // await database.CreateDatabase();
-            // database.CloseDb();
-            const hasVersion = await database.HasVersionTable();
-            if(!hasVersion) {
-                await database.CreateDatabase();
+    const fetchData = async () => {
+        console.log("fetchData");
+        // await database.CreateDatabase();
+        // database.CloseDb();
+        const hasVersion = await database.HasVersionTable();
+        if(!hasVersion) {
+            await database.CreateDatabase();
+            navigation.navigate('RecurringConfigurationPage');
+        } else {
+            // TODO: upgrade version
+            const hasRecurringTransactions = await database.HasRecurringTransactions();
+            if(!hasRecurringTransactions) {
+                setDatabaseReady(false);
                 navigation.navigate('RecurringConfigurationPage');
             } else {
-                // TODO: upgrade version
-                const hasRecurringTransactions = await database.HasRecurringTransactions();
-                if(!hasRecurringTransactions) {
-                    navigation.navigate('RecurringConfigurationPage');
-                } else {
-                    setDatabaseReady(true);
-                }
+                setDatabaseReady(true);
             }
-            // navigation.navigate('RecurringConfigurationPage');
         }
-        fetchData();
-    }, []);
+        // navigation.navigate('RecurringConfigurationPage');
+    }
+
+    // useEffect(() => {
+    //     fetchData();
+    // }, [navigation]);
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchData();
+            return () => {};
+        }, [])
+    );
     
     return (
         <SafeAreaView style={[styles.content]}>
