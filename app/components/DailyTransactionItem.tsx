@@ -14,7 +14,7 @@ export function DailyTransactionItem(props) {
 
     return (
       <View>
-        <Pressable onPress={() => editItem() } style={ itemStyle.container }>
+        <Pressable onPress={() => editItem() } style={ itemStyle.container } >
             <View style={ { flexDirection: "row", alignItems: "center"}}>
                 <View style={ { flexDirection: "column"} }>
                     <Text style={ { color: "#525174", fontSize: 15 } } >{item.label}</Text>

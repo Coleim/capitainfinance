@@ -12,7 +12,6 @@ export function HomePage( {navigation} ) {
     const [databaseReady, setDatabaseReady] = useState(false);
 
     const fetchData = async () => {
-        console.log("fetchData");
         // await database.CreateDatabase();
         // database.CloseDb();
         const hasVersion = await database.HasVersionTable();
@@ -47,8 +46,7 @@ export function HomePage( {navigation} ) {
         <SafeAreaView style={[styles.content]}>
             { databaseReady ? 
                 <View style={{ flex: 1 }}>
-                    <TransactionsContainer></TransactionsContainer>
-                    <MenuBar navigation={navigation}></MenuBar>
+                    <TransactionsContainer navigation={navigation}></TransactionsContainer>
                 </View>
                 :
                 <View style={{ flex: 1, justifyContent: "center"}}>

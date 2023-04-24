@@ -9,7 +9,7 @@ export function LatestTransactions(props) {
     
     <View style={ styles.content }>
       <SafeAreaView style={ [styles.content, { marginTop: 5 }] }>
-          <FlatList
+          <FlatList 
               data={dailyTransactions}
               renderItem={({item}) => <DailyTransactionItem item={item}></DailyTransactionItem>}
           />

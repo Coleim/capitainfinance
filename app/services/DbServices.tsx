@@ -147,7 +147,7 @@ export namespace database {
             // await connection.execute(`INSERT INTO recurring (transaction_id,owner_id,label,amount,category,startDate,endDate) VALUES( '${UUID}', '123', 'Epargne', '-400', 'Maison', null, null) `);
 
 
-            /////////////////////////////////////////
+            // ///////////////////////////////////////
 
 
             // UUID = Crypto.randomUUID();
@@ -162,8 +162,6 @@ export namespace database {
             // await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-03", 'McDo', '-45.20', 'Nourriture') `);
             // UUID = Crypto.randomUUID();
             // await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-04", 'Super U', '-10.14', 'Nourriture') `);
-            // UUID = Crypto.randomUUID();
-            // await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-04", 'Amazon', '-16.99', 'Amazon') `);
             // UUID = Crypto.randomUUID();
             // await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-04", 'Amazon', '-16.99', 'Amazon') `);
             
@@ -276,6 +274,20 @@ export namespace database {
             // UUID = Crypto.randomUUID();
             // await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-21", 'Autoroute', '-16.80', 'Vehicule') `);
 
+            // UUID = Crypto.randomUUID();
+            // await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-24", 'Amazon', '-3.59', 'Amazon') `);
+            // UUID = Crypto.randomUUID();
+            // await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-24", 'Amazon', '-22.35', 'Amazon') `);
+            // UUID = Crypto.randomUUID();
+            // await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-24", 'Casino', '-45.91', 'Nourriture') `);
+            // UUID = Crypto.randomUUID();
+            // await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-24", 'Autoroute', '-16.80', 'Vehicule') `);
+            // UUID = Crypto.randomUUID();
+            // await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-24", 'Casino', '-5.98', 'Nourriture') `);
+            // UUID = Crypto.randomUUID();
+            // await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-24", 'Pharmacie', '-2.90', 'Sante') `);
+            // UUID = Crypto.randomUUID();
+            // await connection.execute(`INSERT INTO daily_transactions (transaction_id, owner_id, date, label, amount, category) VALUES( '${UUID}', '123', "2023-04-24", 'Autoroute', '-13.50', 'Vehicule') `);
 
         });
     }

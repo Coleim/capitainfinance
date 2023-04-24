@@ -53,16 +53,16 @@ export const styles = StyleSheet.create({
     },
     menuBar: {
         // flex: 1,
-        flexDirection: "row",
+        // flexDirection: "row",
         // height: 50,
         // backgroundColor: "#74B3CE",
         // backgroundColor: "#525174",
-        backgroundColor: "#fff",
+        // backgroundColor: "#fff",
         // marginTop: "auto",
-        marginBottom: 5,
-        marginLeft: 5,
-        marginRight: 5,
-        borderRadius: 20,
-        borderColor: "#fff"
+        // marginBottom: 5,
+        // marginLeft: 5,
+        // marginRight: 5,
+        // borderRadius: 20,
+        // borderColor: "#fff"
     }
   });

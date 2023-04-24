@@ -5,8 +5,9 @@ import { useFocusEffect } from "@react-navigation/native";
 import { AmountSummary } from '../components/AmountSummary';
 import { BurndownChart } from '../components/BurndownChart';
 import { LatestTransactions } from '../components/LatestTransactions';
+import { MenuBar } from "./MenuBar";
 
-export function TransactionsContainer() {
+export function TransactionsContainer( {navigation} ) {
 
     const [remainingAmount, setRemainingAmount] = useState(0);
     const [amountPerDay, setAmountPerDay] = useState(0);
@@ -69,7 +70,8 @@ export function TransactionsContainer() {
             <BurndownChart
                 expectedRemainingAmountPerDay={expectedRemainingAmountPerDay}
                 realRemainingAmountPerDay={realRemainingAmountPerDay} />
-            <LatestTransactions dailyTransactions={dailyTransactions}/>
+            <LatestTransactions dailyTransactions={dailyTransactions} />
+            <MenuBar navigation={navigation}></MenuBar>
         </View>
     );
 }
