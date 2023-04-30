@@ -1,4 +1,4 @@
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, Button, Text, View } from "react-native";
 import { MenuBar } from '../components/MenuBar';
 import { styles } from '../../styles';
 import { useCallback, useEffect, useState } from "react";
@@ -6,55 +6,77 @@ import { database } from "../services/DbServices";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TransactionsContainer } from "../components/TransactionsContainer";
 import { useFocusEffect } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { Transaction } from "../models/transaction";
+import { addRecurringTransaction, addTransaction, initTransactions, resetStore, updateCount, updateTransaction } from "../actions/transactions";
+import { insertSaving } from "../actions/savings";
 
-export function HomePage( {navigation} ) {
+export const HomePage = ({ navigation }) => {
+   
+    const dispatch = useDispatch();
 
     const [databaseReady, setDatabaseReady] = useState(false);
 
     const fetchData = async () => {
-        // await database.CreateDatabase();
-        // database.CloseDb();
-        const hasVersion = await database.HasVersionTable();
-        if(!hasVersion) {
-            await database.CreateDatabase();
-            navigation.navigate('RecurringConfigurationPage');
-        } else {
-            // TODO: upgrade version
-            const hasRecurringTransactions = await database.HasRecurringTransactions();
-            if(!hasRecurringTransactions) {
-                setDatabaseReady(false);
-                navigation.navigate('RecurringConfigurationPage');
-            } else {
-                setDatabaseReady(true);
-            }
-        }
+        // setDatabaseReady(true);
+
+        // const hasVersion = await database.HasVersionTable();
+        // if(!hasVersion) {
+        //     await database.CreateDatabase();
+        //     navigation.navigate('RecurringConfigurationPage');
+        // } else {
+        //     // TODO: upgrade version
+        //     const hasRecurringTransactions = await database.HasRecurringTransactions();
+        //     if(!hasRecurringTransactions) {
+        //         setDatabaseReady(false);
+        //         navigation.navigate('RecurringConfigurationPage');
+        //     } else {
+        //         setDatabaseReady(true);
+        //     }
+        // }
         // navigation.navigate('RecurringConfigurationPage');
     }
 
-    // useEffect(() => {
-    //     fetchData();
-    // }, [navigation]);
+    const today = new Date();
+
+    useEffect(() => {
+        dispatch(resetStore())
+        dispatch(addRecurringTransaction({
+            transaction_id: 100,
+            owner_id: "",
+            label: "",
+            amount: 100,
+            isReccuring: true
+        }))
+        dispatch(addTransaction({
+            transaction_id: 0,
+            owner_id: "",
+            label: "",
+            amount: 30,
+            isReccuring: false
+        }))
+        dispatch(addTransaction({
+            transaction_id: 0,
+            owner_id: "",
+            label: "",
+            amount: 10,
+            date: new Date(today.getFullYear(), today.getMonth(), 10),
+            isReccuring: false
+        }))
+    }, []);
 
     useFocusEffect(
         useCallback(() => {
-            fetchData();
+            // fetchData();
             return () => {};
         }, [])
     );
-    
+
     return (
         <SafeAreaView style={[styles.content]}>
-            { databaseReady ? 
-                <View style={{ flex: 1 }}>
-                    <TransactionsContainer navigation={navigation}></TransactionsContainer>
-                </View>
-                :
-                <View style={{ flex: 1, justifyContent: "center"}}>
-                    <ActivityIndicator size="large" />
-                </View>
-            }
-            
-            
+            <View style={{ flex: 1 }}>
+                <TransactionsContainer navigation={navigation}></TransactionsContainer>
+            </View>
         </SafeAreaView>
     );
 }

@@ -59,7 +59,10 @@ export function BurndownChart(props) {
                 data: expectedRemainingAmountPerDay,
                 color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`
               }, 
-              { data: realRemainingAmountPerDay }
+              { data: realRemainingAmountPerDay },
+              { data: days.map( _=> 0),
+                strokeWidth: 1,
+                color: (opacity = 1) => `rgba(255, 0, 0, 1)` }
             ]
           }}
           width={Dimensions.get("window").width - 20} // from react-native

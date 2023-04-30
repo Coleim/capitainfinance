@@ -4,6 +4,12 @@ export namespace date {
     const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
                         "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
 
+    export const GetNumberOfDaysInCurrentMonth = () => {
+        const today = new Date();
+        const numberOfDays = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+        return numberOfDays;
+    }
+    
     export const GetMonthAsString = (date: Date | null) => {
         if(!date) return "";
         return monthNames[date.getMonth()]
@@ -46,7 +52,6 @@ export namespace date {
 
     export const GetFirstDayOfMonth = () => {
         const today = new Date();
-
         const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
         return AsDatabaseString(firstDay);
     }
