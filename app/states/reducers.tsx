@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { ADD_RECURRING_TRANSACTION, ADD_TRANSACTION, RESET_STORE, TransactionAction, UPDATE_RECURRING_TRANSACTION } from "../actions/transactions";
+import { ADD_RECURRING_TRANSACTION, ADD_TRANSACTION, RESET_STORE, SET_TODAY, TransactionAction, UPDATE_RECURRING_TRANSACTION } from "../actions/transactions";
 import * as Crypto from 'expo-crypto';
 import { database } from '../services/DbServices';
 import { INSERT_SAVING } from '../actions/savings';
@@ -28,10 +28,8 @@ function clementSettings() {
 }
 
 
-// const recurringTransactions = useSelector( state => state.recurringTransactions);
-// const remainingRecurringMonthlyAmount = useSelector( state => state.remainingRecurringMonthlyAmount);
-
 const initialStateRecurringTransactions = {
+    today: undefined,
     recurringTransactions: {
         list: [],
         totalExpenses: 0,
@@ -55,6 +53,7 @@ const initialStateRecurringTransactions = {
     theoriticalAvailableAmountPerDay: [], // Montant disponible théorique, chaque jour : availableMonthlyAmount - availableDailyAmount x jour
     realAvailableAmountPerDay: [], // Montant disponible réel, chaque jour, jusqu'au jour courant : availableMonthlyAmount - sum(spentPerDay[i] , i < jour)
 }
+
 
 
  // const getRemainingAmount = async () => {        
@@ -87,55 +86,66 @@ const initialStateRecurringTransactions = {
     // }
 
 
-const getRealAvailableAmountPerDay = (availableMonthlyAmount: number, spentPerDay: number[]) : number[] => {
-    const today = new Date();
+const getRealAvailableAmountPerDay = (availableMonthlyAmount: number, spentPerDay: number[], today: Date | undefined) : number[] => {    
     let realAvailableAmountPerDay = [];
-    let stackedAvailableAmountPerDay = availableMonthlyAmount;
-    console.log("spentPerDay: ", spentPerDay)
-    console.log("stackedAvailableAmountPerDay: ", stackedAvailableAmountPerDay)
-    console.log("availableMonthlyAmount: ", availableMonthlyAmount)
-    for (let i = 0; i < today.getDate(); ++i) {
-        if(spentPerDay.length > i ) {
-            stackedAvailableAmountPerDay = stackedAvailableAmountPerDay + Number(spentPerDay.at(i));
-            realAvailableAmountPerDay.push(stackedAvailableAmountPerDay);
-        } else {
-            realAvailableAmountPerDay.push(stackedAvailableAmountPerDay);
+    let stackedAvailableAmountPerDay = Number(availableMonthlyAmount);
+    console.log(stackedAvailableAmountPerDay)
+    if(today) {
+        for (let i = 0; i < today.getDate(); ++i) {
+            if(spentPerDay.length > i ) {
+                console.log("AH ? before " , stackedAvailableAmountPerDay)
+                console.log("AH ? Number(spentPerDay[i]) " , Number(spentPerDay[i]))
+                stackedAvailableAmountPerDay = Number(stackedAvailableAmountPerDay) + Number(spentPerDay[i]);
+                realAvailableAmountPerDay.push(stackedAvailableAmountPerDay);
+                console.log("AH ? " , stackedAvailableAmountPerDay)
+            } else {
+                realAvailableAmountPerDay.push(stackedAvailableAmountPerDay);
+                console.log(stackedAvailableAmountPerDay)
+            }
         }
     }
-    console.log("getRealAvailableAmountPerDay: ", realAvailableAmountPerDay)
+    console.log(realAvailableAmountPerDay)
     return realAvailableAmountPerDay;
 }
 
-const transactions = (state = initialStateRecurringTransactions, action) => {
+const fillSpendPerDay = (today: Date, iSpent: number[]) => {    
+    let spentPerDay = [...iSpent];
+    for (let i = 0; i < today.getDate(); ++i) {
+        if(spentPerDay.length <= i) {
+            spentPerDay.push(Number(0));
+        }
+    }
+    return spentPerDay
+}
+
+const transactions = (state = initialStateRecurringTransactions, action: any) => {
     console.log(">>>>>>>>>>>>>>>   recurringTransactions <<<<<<<<<<<<<<<<<<<<<<")
     console.log("STATE: " , state)
     console.log("ACTION: " , action)
-    const today = new Date();
-    const numberOfDaysInMonth = date.GetNumberOfDaysInCurrentMonth();
+    if(action.type !== SET_TODAY && !state.today) {
+        return state;
+    }
+    const today: Date = action.today ?? state.today;
+    const numberOfDaysInMonth = date.GetNumberOfDaysInCurrentMonth(today);
     let realAvailableAmountPerDay = [];
+    let spentPerDay = [];
     
     switch (action.type) {
+        case SET_TODAY:
+            spentPerDay = fillSpendPerDay(today, state.spentPerDay);
+            return {
+                ...state,
+                today: action.today,
+                spentPerDay: spentPerDay,
+                realAvailableAmountPerDay: getRealAvailableAmountPerDay(state.availableMonthlyAmount, spentPerDay, today)
+            }
         case ADD_RECURRING_TRANSACTION:
-            // return initialStateRecurringTransactions;
             const availableMonthlyAmount = state.availableMonthlyAmount + action.transaction.amount;
-            const availableDailyAmount = Number((availableMonthlyAmount / numberOfDaysInMonth).toFixed(2));
+            const availableDailyAmount = Number((availableMonthlyAmount / numberOfDaysInMonth));
             let theoriticalAvailableAmountPerDay = [];
             for (let i = 1; i <= numberOfDaysInMonth; ++i) {
-                theoriticalAvailableAmountPerDay.push(Number(availableMonthlyAmount - (i * availableDailyAmount)).toFixed(2));
+                theoriticalAvailableAmountPerDay.push(Number(availableMonthlyAmount - (i * availableDailyAmount)));
             }
-
-            realAvailableAmountPerDay = getRealAvailableAmountPerDay(availableMonthlyAmount, state.spentPerDay);
-            // const realAvailableAmountPerDay = [];
-            // let stackedAvailableAmountPerDay = availableMonthlyAmount;
-            // for (let i = 0; i < today.getDate(); ++i) {
-            //     if(state.spentPerDay.length > i ) {
-            //         stackedAvailableAmountPerDay = stackedAvailableAmountPerDay + Number(state.spentPerDay.at(i));
-            //         realAvailableAmountPerDay.push(stackedAvailableAmountPerDay);
-            //     } else {
-            //         realAvailableAmountPerDay.push(stackedAvailableAmountPerDay);
-            //     }
-            // }
-
             return {
                 ...state,
                 recurringTransactions: {
@@ -148,28 +158,21 @@ const transactions = (state = initialStateRecurringTransactions, action) => {
                 availableMonthlyAmount: availableMonthlyAmount,
                 availableDailyAmount: availableDailyAmount,
                 theoriticalAvailableAmountPerDay: theoriticalAvailableAmountPerDay,
-                realAvailableAmountPerDay: realAvailableAmountPerDay
+                realAvailableAmountPerDay: getRealAvailableAmountPerDay(availableMonthlyAmount, state.spentPerDay, state.today)
             }
         case ADD_TRANSACTION:
-            let spentPerDay = [...state.spentPerDay];
-            for (let i = 0; i < today.getDate(); ++i) {
-                if(spentPerDay.length <= i) {
-                    spentPerDay.push(0);
-                }
-            }
-            
+            spentPerDay = fillSpendPerDay(today, state.spentPerDay);
             if(action.transaction.date) {
                 const actionDate = action.transaction.date as Date;
                 if(actionDate.getDate() > today.getDate()) {
-                    spentPerDay[today.getDate()-1] = spentPerDay.at(today.getDate()-1) + action.transaction.amount;
+                    spentPerDay[today.getDate()-1] = Number(spentPerDay[today.getDate()-1]) + action.transaction.amount;
                 } else {
-                    spentPerDay[actionDate.getDate()-1] = spentPerDay.at(actionDate.getDate()-1) + action.transaction.amount;
+                    spentPerDay[actionDate.getDate()-1] = Number(spentPerDay[actionDate.getDate()-1]) + action.transaction.amount;
                 }
             } else {
-                spentPerDay[today.getDate()-1] = spentPerDay.at(today.getDate()-1) + action.transaction.amount;
+                spentPerDay[today.getDate()-1] = Number(spentPerDay[today.getDate()-1]) + action.transaction.amount;
             }
-
-            realAvailableAmountPerDay = getRealAvailableAmountPerDay(state.availableMonthlyAmount, spentPerDay);
+            realAvailableAmountPerDay = getRealAvailableAmountPerDay(state.availableMonthlyAmount, spentPerDay, today);
             return {
                 ...state,
                 currentMonthDailyTransactions: {
@@ -186,59 +189,20 @@ const transactions = (state = initialStateRecurringTransactions, action) => {
         case UPDATE_RECURRING_TRANSACTION:
             return state;
         case RESET_STORE:
-                return initialStateRecurringTransactions
+            spentPerDay = fillSpendPerDay(today, []);
+            return {
+                ...initialStateRecurringTransactions,
+                today: action.today,
+                spentPerDay: spentPerDay,
+                realAvailableAmountPerDay: getRealAvailableAmountPerDay(state.availableMonthlyAmount, spentPerDay, today)
+            }
         default:
-            return state;
+            return initialStateRecurringTransactions;
     }
 }
-
-// const remainingRecurringMonthlyAmount = (state = 0, action) => {
-//     console.log(">>>>>>>>>>>>>>>   remainingRecurringMonthlyAmount <<<<<<<<<<<<<<<<<<<<<<")
-//     console.log("STATE: " , state)
-//     console.log("ACTION: " , action)
-//     switch (action.type) {
-//         case ADD_RECURRING_TRANSACTION:
-//             return state + action.transaction.amount;
-//             return 0; 
-//         case UPDATE_RECURRING_TRANSACTION:
-//             return state;
-//         default:
-//             return state;
-//     }
-// }
-
-const testRed = (state = 0, action) => {
-    console.log(">>>>>>>>>>>>>>>   testRed <<<<<<<<<<<<<<<<<<<<<<")
-    console.log("STATE: " , state)
-    console.log("ACTION: " , action)
-    switch (action.type) {
-        case ADD_RECURRING_TRANSACTION:
-            return state + action.transaction.amount;
-            return 0; 
-        case UPDATE_RECURRING_TRANSACTION:
-            return state;
-        default:
-            return state;
-    }
-}
-
-
-// export const GetRemainingMonthlyAmount = async () => {
-//     let remainingMonthlyAmount = 0;
-//     await db.transaction(async connection => {
-//         const res = await connection.execute(`SELECT amount FROM recurring ;`);
-//         res.rows.forEach(row => {
-//             remainingMonthlyAmount += Number(row.amount)
-//         });
-//     });
-//     return remainingMonthlyAmount.toFixed(2);
-// }
 
 const reducers = combineReducers({
-    transactions,
-    testRed
+    transactions
 });
-
-console.log(">> RED: " , reducers)
 
 export default reducers;

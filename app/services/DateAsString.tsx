@@ -4,18 +4,17 @@ export namespace date {
     const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
                         "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
 
-    export const GetNumberOfDaysInCurrentMonth = () => {
-        const today = new Date();
+    export const GetNumberOfDaysInCurrentMonth = (today: Date) => {
         const numberOfDays = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
         return numberOfDays;
     }
     
-    export const GetMonthAsString = (date: Date | null) => {
+    export const GetMonthAsString = (date: Date | undefined) => {
         if(!date) return "";
         return monthNames[date.getMonth()]
     }
 
-    export const AsString = (date: Date | null) => {
+    export const AsString = (date: Date | undefined) => {
         if(!date) return "";
         const yyyy = date.getFullYear();
         let dd = date.getDate();
@@ -32,7 +31,7 @@ export namespace date {
         return dateStr;
     }
 
-    export const AsDatabaseString= (date: Date | null) => {
+    export const AsDatabaseString= (date: Date | undefined) => {
         //"2023-04-20"
         if(!date) return "";
         const yyyy = date.getFullYear();

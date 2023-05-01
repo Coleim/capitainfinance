@@ -1,56 +1,30 @@
-import { View, Text, ActivityIndicator, Pressable, TouchableHighlight, TouchableOpacity, Button } from "react-native";
-import { AmountSummary } from '../components/AmountSummary';
-import { BurndownChart } from '../components/BurndownChart';
-import { LatestTransactions } from '../components/LatestTransactions';
-import { MenuBar } from '../components/MenuBar';
+import { View, Text, Pressable } from "react-native";
 import { styles } from '../../styles';
-import { useCallback, useEffect, useState } from "react";
-import { database } from "../services/DbServices";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { useEffect, useState } from "react";
+// import { database } from "../services/DbServices";
 import { RecurringTransactions } from "../components/RecurringTransactions";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useFocusEffect } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
   
 export function RecurringConfigurationPage( {navigation} ) {
-    
+
+    const [selectedTab, setSelectedTab] = useState(1);
+    const recurringTransactions = useSelector( state => state.transactions.recurringTransactions.list );
     const [expensesItems, setExpensesItems] = useState([]);
     const [incomesItems, setIncomesItems] = useState([]);
 
-    const [selectedTab, setSelectedTab] = useState(1);
 
-    const getTransactions = async () => {
-        const array = await database.GetRecurringTransactions();
-        const expenses = [];
-        const incomes = [];
-        array.forEach( val => {
-            if(val.amount > 0 ) {
-                incomes.push(val)
-            }
-            if(val.amount < 0 ) {
-                expenses.push(val)
-            }
-        })
+    useEffect(() => {
+        const expenses = recurringTransactions.filter(item => item.amount < 0);
+        const incomes = recurringTransactions.filter(item => item.amount > 0);
         setExpensesItems(expenses);
         setIncomesItems(incomes);
-
-        
-    }
-
-    useFocusEffect(
-        useCallback(() => {
-            getTransactions();
-            return () => {};
-        }, [])
-    );
-    
-    useEffect(() => {
-        getTransactions();
-    }, [navigation]);
+    }, [recurringTransactions]);  
 
     function addNewTransaction(): void {
         let isExpense = selectedTab == 2;
-        navigation.navigate('EditRecurringTransactionItemPage', { item: null, isExpense } );
+        navigation.navigate('EditTransactionItemPage', { item: null, isExpense, recurring: true } );
     }
 
     function back(): void {

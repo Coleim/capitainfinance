@@ -1,15 +1,16 @@
 import { Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { styles } from "../../styles";
-import { database } from "../services/DbServices";
+// import { database } from "../services/DbServices";
 import { date } from "../services/DateAsString";
 import { useNavigation } from '@react-navigation/native';
+import { Transaction } from "../models/transaction";
 
 export function DailyTransactionItem(props) {
-    const item: database.Transaction = props.item;
+    const item: Transaction = props.item;
     const navigation = useNavigation();
     function editItem(): void {
         const isExpense = item.amount <= 0;
-        navigation.navigate('EditTransactionItemPage', { item, isExpense });
+        navigation.navigate('EditTransactionItemPage', { item, isExpense, recurring: false });
     }
 
     return (

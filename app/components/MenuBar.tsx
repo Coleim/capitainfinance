@@ -8,11 +8,11 @@ export function MenuBar({ navigation }) {
   }
 
   function addExpense(): void {
-    navigation.navigate('EditTransactionItemPage', { item: null, isExpense: true });
+    navigation.navigate('EditTransactionItemPage', { item: null, isExpense: true, recurring: false });
   }
 
   function addIncome(): void {
-    navigation.navigate('EditTransactionItemPage', { item: null, isExpense: false });
+    navigation.navigate('EditTransactionItemPage', { item: null, isExpense: false, recurring: false });
   }
 
   return (

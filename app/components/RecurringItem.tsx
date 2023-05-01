@@ -10,7 +10,7 @@ export function RecurringItem(props) {
 
     const navigation = useNavigation();
     function editItem(): void {
-        navigation.navigate('EditRecurringTransactionItemPage', { item, isExpense });
+        navigation.navigate('EditTransactionItemPage', { item, isExpense, recurring: true });
     }
 
     return (

@@ -1,18 +1,18 @@
 import { Alert, Button, Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import { styles } from "../../styles";
-import { database } from "../services/DbServices";
-import { date } from "../services/DateAsString";
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useCallback, useEffect, useState } from "react";
+import { useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from "react";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
-import Checkbox from 'expo-checkbox';
+import { Transaction } from "../models/transaction";
+import { useDispatch } from "react-redux";
+import { addTransaction, updateTransaction } from "../actions/transactions";
 
 export function ItemEdition(props) {
-  const item: database.Transaction = props.item;
+  const item: Transaction = props.item;
   const isExpense: boolean = props.isExpense;
 
+  const dispatch = useDispatch();
+
   const [amountStr, setAmountStr] = useState(item.amount.toString());
-  const [isLimited, setIsLimited] = useState(false);
   const [startDate, setStartDate] = useState(item.date);
   // const [category, setCategory] = useState(item.category);
   const [label, setLabel] = useState(item.label);
@@ -34,10 +34,22 @@ export function ItemEdition(props) {
   async function saveItem(): Promise<void> {
     if (validateAmountNumber() && !saveDisabled) {
       let amount = getCorrectNumber();
-      if(item.isReccuring) {
-        await database.UpdateRecurringTransactions(item.transaction_id, label, amount.toFixed(2));
+      console.log("INSERT : ", amount)
+      // const transaction = {
+      //   transaction_id: item.transaction_id ?? Crypto.randomUUID(),
+      //   amount
+      // };
+
+      // {transaction_id: Crypto.randomUUID(), owner_id: '123', label: 'Salaire Clement', amount: 3100, category: 'SALAIRE', isReccuring: true }
+
+
+
+      if(item.transaction_id) {
+        // UPDATE ITEM
+        // TODO
+        dispatch(updateTransaction(item));
       } else {
-        await database.UpdateDailyTransaction(item.transaction_id, label, amount.toFixed(2));
+        dispatch(addTransaction(label, amount, "OTHER", item.isReccuring));
       }
       back();
     }

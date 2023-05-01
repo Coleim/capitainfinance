@@ -8,29 +8,27 @@ import { useFocusEffect } from "@react-navigation/native";
 import {
   LineChart,
 } from "react-native-chart-kit";
+import { useSelector } from "react-redux";
 
 
-export function BurndownChart(props) {
+export function BurndownChart() {
+    
+  const theoriticalAvailableAmountPerDay = useSelector( state => state.transactions.theoriticalAvailableAmountPerDay );
+  console.log("theoriticalAvailableAmountPerDay : " , theoriticalAvailableAmountPerDay)
+  const realAvailableAmountPerDay = useSelector( state => state.transactions.realAvailableAmountPerDay );
+  console.log("realAvailableAmountPerDay : " , realAvailableAmountPerDay)
 
-  const expectedRemainingAmountPerDay = props.expectedRemainingAmountPerDay;
-  const realRemainingAmountPerDay = props.realRemainingAmountPerDay;
+  const today = new Date();
+  const numberOfDays = new Date(today.getFullYear(), today.getMonth()+1, 0).getDate();
 
-  const [days, setDays] = useState([] as string[]);
-  const [hidePointsAt, setHidePointsAt] = useState([] as number[]);
-  
-
-  const getRemainingAmount = async () => {
-
-    let today = new Date();
-    let numberOfDays = new Date(today.getFullYear(), today.getMonth()+1, 0).getDate();
-
+  const getDaysOfMonth = () => {
     let dayOfMonth = [];
     for(let i = 0 ; i < numberOfDays; ++i) {
       dayOfMonth.push((i+1).toString());
     }
-
-    setDays(dayOfMonth);
-
+    return dayOfMonth;
+  }
+  const getHidePointsAt = () => {
     let hidePointsAt = [1,2,3,5,6,7,8,10,11,12,13,15,16,17,18,20,21,22,23,25,26,27];
     if(numberOfDays >= 30) {
       hidePointsAt.push(28);
@@ -38,30 +36,31 @@ export function BurndownChart(props) {
     if(numberOfDays >= 31) {
       hidePointsAt.push(29);
     }
-    setHidePointsAt(hidePointsAt)
+    return hidePointsAt;
   }
 
-  useFocusEffect(
-    useCallback(() => {
-      getRemainingAmount();
-      return () => { };
-    }, [])
-  );
+  const days = getDaysOfMonth();
+  const hidePointsAt = getHidePointsAt();
+
+  const withDots = realAvailableAmountPerDay.length === 1;
 
   return (
     <View style={ { alignSelf: "center"}}>
-      { (expectedRemainingAmountPerDay.length > 0 && realRemainingAmountPerDay.length > 0) && 
+      { (theoriticalAvailableAmountPerDay!.length > 0 && realAvailableAmountPerDay!.length > 0 && days!.length > 0 && hidePointsAt!.length > 0) && 
+      // <Text>PROUTE</Text>
         <LineChart
           data={{
             labels: days,
             datasets: [
               {
-                data: expectedRemainingAmountPerDay,
+                data: theoriticalAvailableAmountPerDay,
+                withDots: false,
                 color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`
               }, 
-              { data: realRemainingAmountPerDay },
+              { data: realAvailableAmountPerDay, withDots: withDots },
               { data: days.map( _=> 0),
                 strokeWidth: 1,
+                withDots: false,
                 color: (opacity = 1) => `rgba(255, 0, 0, 1)` }
             ]
           }}
@@ -83,8 +82,9 @@ export function BurndownChart(props) {
             },
             useShadowColorFromDataset: true,
             propsForDots: {
-              r: "0",
-              strokeWidth: "0",
+              r: "1",
+              strokeWidth: "5",
+              stroke: "blue"
             }
           }}
           style={{

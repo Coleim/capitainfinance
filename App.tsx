@@ -6,12 +6,12 @@ import { HomePage } from './app/pages/HomePage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RecurringConfigurationPage } from './app/pages/RecurringConfigurationPage';
-import { EditRecurringTransactionItemPage } from './app/pages/EditRecurringTransactionItemPage';
+// import { EditRecurringTransactionItemPage } from './app/pages/EditRecurringTransactionItemPage';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { ActivityIndicator, SafeAreaView, Text, View } from "react-native";
 import { EditTransactionItemPage } from './app/pages/EditTransactionItemPage';
-import { database } from './app/services/DbServices';
+// import { database } from './app/services/DbServices';
 import { Provider, useDispatch } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from './app/states/store';
@@ -65,7 +65,7 @@ const App = () => {
               <Stack.Navigator screenOptions={{headerShown: false}}>
                 <Stack.Screen name="HomePage" component={HomePage}/>
                 <Stack.Screen name="RecurringConfigurationPage" component={RecurringConfigurationPage} />
-                <Stack.Screen name="EditRecurringTransactionItemPage" component={EditRecurringTransactionItemPage} />
+                {/* <Stack.Screen name="EditRecurringTransactionItemPage" component={EditRecurringTransactionItemPage} /> */}
                 <Stack.Screen name="EditTransactionItemPage" component={EditTransactionItemPage} />
               </Stack.Navigator>
             </NavigationContainer>

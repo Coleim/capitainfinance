@@ -67,9 +67,9 @@ export function TransactionsContainer( {navigation} ) {
 
     return (
         <View style={{ flex: 1, justifyContent: "center"}}>
-            {/* <Text style={{color: 'white'}}> { remainingRecurringMonthlyAmount } </Text>
-            <Text style={{color: 'white'}}> { JSON.stringify(recurringTransactions) } </Text> */}
             <AmountSummary />
+            <BurndownChart />
+            <MenuBar navigation={navigation}></MenuBar>
              {/* <AmountSummary 
                 remainingAmount={remainingAmount} 
                 amountPerDay={amountPerDay}
