@@ -7,6 +7,7 @@ import { Transaction } from "../models/transaction";
 
 export function DailyTransactionItem(props) {
     const item: Transaction = props.item;
+
     const navigation = useNavigation();
     function editItem(): void {
         const isExpense = item.amount <= 0;
@@ -19,7 +20,7 @@ export function DailyTransactionItem(props) {
             <View style={ { flexDirection: "row", alignItems: "center"}}>
                 <View style={ { flexDirection: "column"} }>
                     <Text style={ { color: "#525174", fontSize: 15 } } >{item.label}</Text>
-                    <Text style={ { fontSize: 10 } } >{ date.AsString(item.date) } </Text>
+                    <Text style={ { fontSize: 10 } } >{ date.AsString(new Date(item.date)) } </Text>
                 </View>
                 <Text style={ [{ marginLeft: "auto", fontWeight: "bold" }, item.amount > 0 ? {color: "#06d6a0"}: {color: "#ef476f"}] } >{item.amount} €</Text>
             </View>

@@ -53,12 +53,18 @@ export const HomePage = ({ navigation }) => {
         dispatch(resetStore(new Date()));
         dispatch(setToday(new Date()));
 
+        const pastDate = new Date(today.getFullYear(), today.getMonth()-1, 25)
+
         // dispatch(setToday(new Date(today.getFullYear(), today.getMonth(), 25)));
 
-        dispatch(addTransaction('Salaire Clement', 3100, 'SALAIRE', true));
-        dispatch(addTransaction('Salaire Sybille', 1700, 'SALAIRE', true));
-        dispatch(addTransaction('Croatie', -295, 'SALAIRE', true));
+        dispatch(addTransaction('Salaire Clement', 3100, 'SALAIRE', undefined, true));
+        dispatch(addTransaction('Test 2', 10, 'TEST'));
+        dispatch(addTransaction('Test 4', 10, 'TEST', pastDate));
 
+        // dispatch(addTransaction('Salaire Sybille', 1700, 'SALAIRE', true));
+        // dispatch(addTransaction('Croatie', -295, 'SALAIRE', true));
+
+       
         // dispatch(addRecurringTransaction({transaction_id: Crypto.randomUUID(), owner_id: '123', label: 'Salaire Sybille', amount: 1700, category: 'SALAIRE', isReccuring: true }));
         // dispatch(addRecurringTransaction({transaction_id: Crypto.randomUUID(), owner_id: '123', label: 'Croatie', amount: -295, category: 'CREDIT', isReccuring: true }));
         // dispatch(addTransaction({

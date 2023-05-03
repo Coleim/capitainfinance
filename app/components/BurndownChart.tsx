@@ -47,7 +47,6 @@ export function BurndownChart() {
   return (
     <View style={ { alignSelf: "center"}}>
       { (theoriticalAvailableAmountPerDay!.length > 0 && realAvailableAmountPerDay!.length > 0 && days!.length > 0 && hidePointsAt!.length > 0) && 
-      // <Text>PROUTE</Text>
         <LineChart
           data={{
             labels: days,

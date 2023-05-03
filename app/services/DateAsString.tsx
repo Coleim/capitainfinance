@@ -15,7 +15,10 @@ export namespace date {
     }
 
     export const AsString = (date: Date | undefined) => {
+        console.log(date)
         if(!date) return "";
+        console.log("PUTE VIERGE ?? ", date as Date)
+        console.log("PUTE VIERGE ?? ", typeof date)
         const yyyy = date.getFullYear();
         let dd = date.getDate();
         let mm = date.getMonth() + 1;

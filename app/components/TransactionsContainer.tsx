@@ -66,9 +66,12 @@ export function TransactionsContainer( {navigation} ) {
     );
 
     return (
-        <View style={{ flex: 1, justifyContent: "center"}}>
-            <AmountSummary />
-            <BurndownChart />
+        <View style={{ flex: 1, justifyContent: "space-between"}}>
+            <View>
+                <AmountSummary />
+                <BurndownChart />
+            </View>
+            <LatestTransactions />
             <MenuBar navigation={navigation}></MenuBar>
              {/* <AmountSummary 
                 remainingAmount={remainingAmount} 

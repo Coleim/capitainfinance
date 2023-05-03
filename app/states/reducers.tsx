@@ -1,31 +1,11 @@
 import { combineReducers } from 'redux';
-import { ADD_RECURRING_TRANSACTION, ADD_TRANSACTION, RESET_STORE, SET_TODAY, TransactionAction, UPDATE_RECURRING_TRANSACTION } from "../actions/transactions";
+import { ADD_RECURRING_TRANSACTION, ADD_TRANSACTION, REMOVE_RECURRING_TRANSACTION, REMOVE_TRANSACTION, RESET_STORE, SET_TODAY, TransactionAction, UPDATE_RECURRING_TRANSACTION, UPDATE_TRANSACTION } from "../actions/transactions";
 import * as Crypto from 'expo-crypto';
-import { database } from '../services/DbServices';
 import { INSERT_SAVING } from '../actions/savings';
 import { Transaction } from '../models/transaction';
 import { date } from '../services/DateAsString';
 
 // https://stackoverflow.com/questions/72748846/modify-android-gradle-properties-in-expo-managed-app
-
-
-function clementSettings() {
-    
-    let recurringTransactionsInitMap = new Map<string, Transaction>();
-    let UUID = Crypto.randomUUID();
-    recurringTransactionsInitMap.set(UUID, {transaction_id: UUID, owner_id: '123', label: 'Salaire Clement', amount: 3100, category: 'SALAIRE', isReccuring: true });
-    // 5227,85
-    UUID = Crypto.randomUUID();
-    recurringTransactionsInitMap.set(UUID, {transaction_id: UUID, owner_id: '123', label: 'Salaire Sybille', amount: 1700, category: 'SALAIRE', isReccuring: true });
-    //=> 1759,39
-    //=> 30,21
-    UUID = Crypto.randomUUID();
-    recurringTransactionsInitMap.set(UUID, {transaction_id: UUID, owner_id: '123', label: 'CAF Mi temps', amount: 297, category: 'ALLOCATIONS', isReccuring: true });
-    UUID = Crypto.randomUUID();
-    recurringTransactionsInitMap.set(UUID, {transaction_id: UUID, owner_id: '123', label: 'CAF Nounou', amount: 188, category: 'ALLOCATIONS', isReccuring: true });
-    console.log(">>>>>>>> recurringTransactionsInitMap " , recurringTransactionsInitMap)
-    return recurringTransactionsInitMap;
-}
 
 
 const initialStateRecurringTransactions = {
@@ -86,10 +66,12 @@ const initialStateRecurringTransactions = {
     // }
 
 
-const getRealAvailableAmountPerDay = (availableMonthlyAmount: number, spentPerDay: number[], today: Date | undefined) : number[] => {    
+const getRealAvailableAmountPerDay = (availableMonthlyAmount: number, spentPerDay: number[], today: Date | undefined) : number[] => {
+    console.log(">>> getRealAvailableAmountPerDay: ")
     let realAvailableAmountPerDay = [];
     let stackedAvailableAmountPerDay = Number(availableMonthlyAmount);
-    console.log(stackedAvailableAmountPerDay)
+    console.log("availableMonthlyAmount: " , availableMonthlyAmount)
+    console.log("stackedAvailableAmountPerDay: " , stackedAvailableAmountPerDay)
     if(today) {
         for (let i = 0; i < today.getDate(); ++i) {
             if(spentPerDay.length > i ) {
@@ -139,7 +121,7 @@ const transactions = (state = initialStateRecurringTransactions, action: any) =>
                 spentPerDay: spentPerDay,
                 realAvailableAmountPerDay: getRealAvailableAmountPerDay(state.availableMonthlyAmount, spentPerDay, today)
             }
-        case ADD_RECURRING_TRANSACTION:
+        case ADD_RECURRING_TRANSACTION: {
             const availableMonthlyAmount = state.availableMonthlyAmount + action.transaction.amount;
             const availableDailyAmount = Number((availableMonthlyAmount / numberOfDaysInMonth));
             let theoriticalAvailableAmountPerDay = [];
@@ -160,7 +142,87 @@ const transactions = (state = initialStateRecurringTransactions, action: any) =>
                 theoriticalAvailableAmountPerDay: theoriticalAvailableAmountPerDay,
                 realAvailableAmountPerDay: getRealAvailableAmountPerDay(availableMonthlyAmount, state.spentPerDay, state.today)
             }
-        case ADD_TRANSACTION:
+        }
+        case UPDATE_RECURRING_TRANSACTION: {
+            const updatedTransaction: Transaction = action.transaction;
+            const recurringTransactions = state.recurringTransactions.list.map((transaction: Transaction) => {
+                if (transaction.transaction_id === updatedTransaction.transaction_id) {
+                    return {
+                        ...transaction,
+                        label: updatedTransaction.label,
+                        amount: updatedTransaction.amount,
+                        category: updatedTransaction.category,
+                        isReccuring: true
+                    }
+                } else {
+                    return transaction;
+                }
+            });
+            const totalExpenses = recurringTransactions.reduce((acc, transaction) => {
+                return transaction.amount < 0 ? acc + transaction.amount : acc;
+            }, 0);
+            const totalIncomes = recurringTransactions.reduce((acc, transaction) => {
+                return transaction.amount > 0 ? acc + transaction.amount : acc;
+            }, 0);
+            const availableMonthlyAmount = totalExpenses + totalIncomes;
+            const availableDailyAmount = Number((availableMonthlyAmount / numberOfDaysInMonth));
+            let theoriticalAvailableAmountPerDay = [];
+            for (let i = 1; i <= numberOfDaysInMonth; ++i) {
+                theoriticalAvailableAmountPerDay.push(Number(availableMonthlyAmount - (i * availableDailyAmount)));
+            }
+            return {
+                ...state,
+                recurringTransactions: {
+                    list: recurringTransactions,
+                    totalExpenses: totalExpenses,
+                    totalIncomes: totalIncomes
+                },
+                totalExpenses: action.transaction.amount<0 ? state.totalExpenses + action.transaction.amount : state.totalExpenses,
+                totalIncomes: action.transaction.amount>0 ? state.totalIncomes + action.transaction.amount : state.totalIncomes,
+                availableMonthlyAmount: availableMonthlyAmount,
+                availableDailyAmount: availableDailyAmount,
+                theoriticalAvailableAmountPerDay: theoriticalAvailableAmountPerDay,
+                realAvailableAmountPerDay: getRealAvailableAmountPerDay(availableMonthlyAmount, state.spentPerDay, today)
+            };
+        }
+        case REMOVE_RECURRING_TRANSACTION: {
+            const recurringTransactions: Transaction[] = state.recurringTransactions.list.filter(
+                (transaction: Transaction) => transaction.transaction_id !== action.transaction.transaction_id
+            );
+            console.log("recurringTransactions: " , recurringTransactions)
+            const totalExpenses = recurringTransactions.reduce((acc, transaction) => {
+                return transaction.amount < 0 ? acc + transaction.amount : acc;
+            }, 0);
+            const totalIncomes = recurringTransactions.reduce(
+                (total, transaction) =>
+                    transaction.amount > 0 ? total + transaction.amount : total,
+                0
+            );
+            const availableMonthlyAmount = recurringTransactions.reduce(
+                (total, transaction) => total + transaction.amount,
+                0
+            );
+            const availableDailyAmount = Number((availableMonthlyAmount / numberOfDaysInMonth));
+            let theoriticalAvailableAmountPerDay = [];
+            for (let i = 1; i <= numberOfDaysInMonth; ++i) {
+                theoriticalAvailableAmountPerDay.push(Number(availableMonthlyAmount - (i * availableDailyAmount)));
+            }
+            return {
+                ...state,
+                recurringTransactions: {
+                    list: recurringTransactions,
+                    totalExpenses,
+                    totalIncomes,
+                },
+                totalExpenses: action.transaction.amount<0 ? state.totalExpenses - action.transaction.amount : state.totalExpenses,
+                totalIncomes: action.transaction.amount>0 ? state.totalIncomes - action.transaction.amount : state.totalIncomes,
+                availableMonthlyAmount,
+                availableDailyAmount,
+                theoriticalAvailableAmountPerDay,
+                realAvailableAmountPerDay: getRealAvailableAmountPerDay(availableMonthlyAmount, state.spentPerDay, state.today),
+            };
+        }
+        case ADD_TRANSACTION: {
             spentPerDay = fillSpendPerDay(today, state.spentPerDay);
             if(action.transaction.date) {
                 const actionDate = action.transaction.date as Date;
@@ -185,9 +247,51 @@ const transactions = (state = initialStateRecurringTransactions, action: any) =>
                 spentPerDay: spentPerDay,
                 realAvailableAmountPerDay: realAvailableAmountPerDay
             }
-            
-        case UPDATE_RECURRING_TRANSACTION:
-            return state;
+        }
+        case UPDATE_TRANSACTION: {
+            // const updatedTransaction = action.transaction;
+            // const updatedTransactionList = state.currentMonthDailyTransactions.list.map((transaction: Transaction) => {
+            //     if (transaction.transaction_id === updatedTransaction.transaction_id) {
+            //         return {
+            //             ...transaction,
+            //             label: updatedTransaction.label,
+            //             amount: updatedTransaction.amount,
+            //             category: updatedTransaction.category,
+            //             isReccuring: true
+            //         }
+            //     } else {
+            //         return transaction;
+            //     }
+            // });
+        
+            // const updatedTotalExpenses = state.currentMonthDailyTransactions.totalExpenses - updatedTransaction.amount;
+            // const updatedTotalIncomes = state.currentMonthDailyTransactions.totalIncomes - updatedTransaction.amount;
+        
+            // const updatedSpentPerDay = fillSpendPerDay(today, []);
+            // updatedTransactionList.forEach((transaction) => {
+            //     const transactionDate = new Date(updatedTransaction.date);
+            //     if (transactionDate.getMonth() === today.getMonth() && transactionDate.getFullYear() === today.getFullYear()) {
+            //         updatedSpentPerDay[transactionDate.getDate() - 1] += transaction.amount;
+            //     }
+            // });
+            // const updatedRealAvailableAmountPerDay = getRealAvailableAmountPerDay(state.availableMonthlyAmount, updatedSpentPerDay, today);
+        
+            // return {
+            //     ...state,
+            //     currentMonthDailyTransactions: {
+            //         list: updatedTransactionList,
+            //         totalExpenses: updatedTotalExpenses,
+            //         totalIncomes: updatedTotalIncomes,
+            //     },
+            //     totalExpenses: state.totalExpenses - updatedTransaction.amount,
+            //     totalIncomes: state.totalIncomes - updatedTransaction.amount,
+            //     spentPerDay: updatedSpentPerDay,
+            //     realAvailableAmountPerDay: updatedRealAvailableAmountPerDay,
+            // };
+        }
+        case REMOVE_TRANSACTION: {
+
+        }
         case RESET_STORE:
             spentPerDay = fillSpendPerDay(today, []);
             return {

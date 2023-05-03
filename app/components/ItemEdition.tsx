@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import { Transaction } from "../models/transaction";
 import { useDispatch } from "react-redux";
-import { addTransaction, updateTransaction } from "../actions/transactions";
+import { addTransaction, removeTransaction, updateTransaction } from "../actions/transactions";
 
 export function ItemEdition(props) {
   const item: Transaction = props.item;
@@ -47,15 +47,16 @@ export function ItemEdition(props) {
       if(item.transaction_id) {
         // UPDATE ITEM
         // TODO
-        dispatch(updateTransaction(item));
+        dispatch(updateTransaction(item, label, amount));
       } else {
-        dispatch(addTransaction(label, amount, "OTHER", item.isReccuring));
+        dispatch(addTransaction(label, amount, "OTHER", undefined, item.isReccuring));
       }
       back();
     }
   }
 
   function back() {
+    console.log("BACK: " , item)
     if(item.isReccuring) {
       navigation.navigate("RecurringConfigurationPage");
     } else {
@@ -107,13 +108,9 @@ export function ItemEdition(props) {
   }
 
 
-  async function removeTransaction() {
+  async function deleteTransaction() {
     setModalVisible(false);
-    if(item.isReccuring) {
-      await database.DeleteRecurringTransactions(item.transaction_id);
-    } else {
-      await database.DeleteDailyTransaction(item.transaction_id);
-    }
+    dispatch(removeTransaction(item));
     back();
   }
 
@@ -155,7 +152,7 @@ export function ItemEdition(props) {
               <Text style={modalStyles.modalText}>Supprimer cette transaction ?</Text>
               <View style={ {flexDirection: "row", justifyContent: "space-between"}}>
                 <Button onPress={() => setModalVisible(false)} title="Non" color="#ff0054" />
-                <Button onPress={removeTransaction} title="Oui" color="#2ec4b6" />
+                <Button onPress={deleteTransaction} title="Oui" color="#2ec4b6" />
               </View>
             </View>
           </View>

@@ -1,10 +1,11 @@
 import { FlatList, SafeAreaView, Text, View } from "react-native";
 import { styles } from '../../styles';
 import { DailyTransactionItem } from "./DailyTransactionItem";
+import { useSelector } from "react-redux";
 
 export function LatestTransactions(props) {
-  const dailyTransactions = props.dailyTransactions;
-
+  const dailyTransactions = useSelector( state => state.transactions.currentMonthDailyTransactions.list );
+  console.log("> dailyTransactions ", dailyTransactions)
   return (
     
     <View style={ styles.content }>
