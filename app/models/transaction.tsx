@@ -1,6 +1,6 @@
 
 export interface Transaction {
-    transaction_id: number;
+    transaction_id: string;
     owner_id: string;
     label: string;
     amount: number;

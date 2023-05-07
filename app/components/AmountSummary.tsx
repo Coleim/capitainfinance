@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
 import { date } from "../services/DateAsString";
 import { useSelector } from "react-redux";
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
+
 
 export function AmountSummary() {
 
@@ -14,20 +16,63 @@ export function AmountSummary() {
   const remainingAmountAsPerToday = realAvailableAmountPerDay.at(today.getDate()-1);
   const amountPerDayUntilEndOfMonth = Number((remainingAmountAsPerToday / numberOfDaysUntilEndOfMonth).toFixed(2));
 
-  const totalExpenses = useSelector( state => state.transactions.currentMonthDailyTransactions.totalExpenses );
-  const totalIncomes = useSelector( state => state.transactions.currentMonthDailyTransactions.totalIncomes );
-  const dailyAmountSpent = -1*( (totalExpenses+totalIncomes) / today.getDate());
+  const currentMonthDailyTransactions = useSelector( state => state.transactions.currentMonthDailyTransactions );
+  const totalSpent = currentMonthDailyTransactions.reduce((acc, transaction) => { return acc + transaction.amount; }, 0);
+  const dailyAmountSpent = -1*( totalSpent / today.getDate());
+
+  const red = "#e91e63";
+  const orange = "#e9a41e";
+  const green = "#1ee9a4";
+
+  const fill = (remainingAmountAsPerToday / availableMonthlyAmount)*100;
+  const tintColor = () => {
+    if(fill >= 70) {
+      return green;
+    } else if( fill >= 30) {
+      return orange;
+    }
+    return red;
+   };
+
+   const formatNumber = ( num: number ) => {
+    if(num < 100000) return num.toString();
+    return (num/1000).toFixed() + "k";
+   }
+
 
   return (
     <View style={styles.amountSummary}>
-      <Text style={styles.white}> Montant total disponible pour {date.GetMonthAsString(today)} {availableMonthlyAmount} €</Text>
-      <Text style={styles.white}> Soit {availableDailyAmount?.toFixed(2)} € par jour </Text>
+      <View style={ { alignItems: "center", justifyContent: "center", alignContent: "center", paddingBottom: 5}} >
+        {/* <Text style={[styles.white, { textAlign: "center" }]}>Montant disponible en</Text> */}
+        <Text style={[styles.white, { fontWeight: "bold", fontSize: 20, textAlign: "center" }]}>{date.GetMonthAsString(today)}</Text>
+      </View>
 
-      <Text style={styles.white}> Montant restant disponible pour {date.GetMonthAsString(today)} </Text>
-      <Text style={styles.white}> { remainingAmountAsPerToday?.toFixed(2) } €</Text>
-      <Text style={styles.white}> Soit { amountPerDayUntilEndOfMonth } € par jour </Text>
-
-      <Text style={styles.white}> Vous avez dépensé { dailyAmountSpent?.toFixed(2) } € par jour </Text>      
+      <View style={ { flexDirection: "row", justifyContent: "space-evenly", alignContent: "center", width: "100%"}}>
+        <View>
+          <AnimatedCircularProgress
+            size={160}
+            width={15}
+            fill={fill}
+            rotation={-100}
+            arcSweepAngle={200}
+            lineCap="round"
+            tintColor={tintColor()}
+            backgroundColor="#3d5875">
+              {
+              (fill) => (
+                <>
+                  <Text style={[styles.white, { fontWeight: "bold", fontSize: 18 }]} >{ formatNumber(remainingAmountAsPerToday) } €</Text>
+                  {/* <Text style={[styles.white, { fontWeight: "bold", fontSize: 18 }]} >{remainingAmountAsPerToday?.toFixed(2)} €</Text> */}
+                  
+                  <Text style={[styles.white, { fontSize: 14 }]}>{ formatNumber(amountPerDayUntilEndOfMonth) } € / jour </Text>
+                  <Text style={[styles.white, { fontSize: 12 }]}>Dépensé</Text>
+                  <Text style={[styles.white, { fontSize: 10, paddingBottom: 15 }]}>{ dailyAmountSpent?.toFixed(2) } € / jour </Text>
+                </>
+              )
+            }
+          </AnimatedCircularProgress>
+        </View>
+      </View>
     </View>
   );
 }
@@ -36,9 +81,9 @@ export function AmountSummary() {
 
 export const styles = StyleSheet.create({
   amountSummary: {
-      height: 100,
       alignItems: "center",
       justifyContent: "center",
+      marginBottom: -40
   },
   white: {
       color: "#fff"

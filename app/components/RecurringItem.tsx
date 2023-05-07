@@ -1,11 +1,10 @@
-import { Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import { styles } from "../../styles";
-import { database } from "../services/DbServices";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { date } from "../services/DateAsString";
 import { useNavigation } from '@react-navigation/native';
+import { Transaction } from "../models/transaction";
 
 export function RecurringItem(props) {
-    const item: database.RecurringTransaction = props.item;
+    const item: Transaction = props.item;
     const isExpense: boolean = props.isExpense;
 
     const navigation = useNavigation();

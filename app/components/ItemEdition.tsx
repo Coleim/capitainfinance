@@ -34,19 +34,7 @@ export function ItemEdition(props) {
   async function saveItem(): Promise<void> {
     if (validateAmountNumber() && !saveDisabled) {
       let amount = getCorrectNumber();
-      console.log("INSERT : ", amount)
-      // const transaction = {
-      //   transaction_id: item.transaction_id ?? Crypto.randomUUID(),
-      //   amount
-      // };
-
-      // {transaction_id: Crypto.randomUUID(), owner_id: '123', label: 'Salaire Clement', amount: 3100, category: 'SALAIRE', isReccuring: true }
-
-
-
       if(item.transaction_id) {
-        // UPDATE ITEM
-        // TODO
         dispatch(updateTransaction(item, label, amount));
       } else {
         dispatch(addTransaction(label, amount, "OTHER", undefined, item.isReccuring));
@@ -56,7 +44,6 @@ export function ItemEdition(props) {
   }
 
   function back() {
-    console.log("BACK: " , item)
     if(item.isReccuring) {
       navigation.navigate("RecurringConfigurationPage");
     } else {
@@ -132,6 +119,12 @@ export function ItemEdition(props) {
       />
       {/* <Text style={itemStyle.header}>Catégorie</Text>
       <TextInput selectTextOnFocus style={itemStyle.container} value={category} onChangeText={(category) => { setCategory(category) }} /> */}
+
+
+      { !item.isReccuring &&
+        <Text style={itemStyle.header}>DATE</Text>
+      }
+
 
       <View style={{ paddingTop: 20, flexDirection: "row", justifyContent: "space-around" }}  >
         <Button onPress={cancel} title="Annuler" color="#ff0054" />

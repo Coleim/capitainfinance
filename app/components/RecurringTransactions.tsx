@@ -1,10 +1,10 @@
 import { FlatList, SafeAreaView, View } from "react-native";
 import { styles } from "../../styles";
 import { RecurringItem } from "./RecurringItem";
-import { database } from "../services/DbServices";
+import { Transaction } from "../models/transaction";
 
 export function RecurringTransactions(props) {
-  const transactions: database.Transaction[] = props.transactions;
+  const transactions: Transaction[] = props.transactions;
   const isExpense: boolean = props.isExpense;
   
   return (

@@ -1,10 +1,4 @@
-import { Dimensions, Text, View } from "react-native";
-import { useCallback, useEffect, useState } from "react";
-import { styles } from '../../styles';
-import { database } from "../services/DbServices";
-import { useFocusEffect } from "@react-navigation/native";
-
-
+import { Dimensions, View } from "react-native";
 import {
   LineChart,
 } from "react-native-chart-kit";
@@ -14,9 +8,7 @@ import { useSelector } from "react-redux";
 export function BurndownChart() {
     
   const theoriticalAvailableAmountPerDay = useSelector( state => state.transactions.theoriticalAvailableAmountPerDay );
-  console.log("theoriticalAvailableAmountPerDay : " , theoriticalAvailableAmountPerDay)
   const realAvailableAmountPerDay = useSelector( state => state.transactions.realAvailableAmountPerDay );
-  console.log("realAvailableAmountPerDay : " , realAvailableAmountPerDay)
 
   const today = new Date();
   const numberOfDays = new Date(today.getFullYear(), today.getMonth()+1, 0).getDate();

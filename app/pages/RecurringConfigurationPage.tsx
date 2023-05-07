@@ -1,7 +1,6 @@
 import { View, Text, Pressable } from "react-native";
 import { styles } from '../../styles';
 import { useEffect, useState } from "react";
-// import { database } from "../services/DbServices";
 import { RecurringTransactions } from "../components/RecurringTransactions";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
@@ -10,7 +9,9 @@ import { useSelector } from "react-redux";
 export function RecurringConfigurationPage( {navigation} ) {
 
     const [selectedTab, setSelectedTab] = useState(1);
-    const recurringTransactions = useSelector( state => state.transactions.recurringTransactions.list );
+    const recurringTransactions = useSelector( state => state.transactions.recurringTransactions );
+    const availableMonthlyAmount = useSelector( state => state.transactions.availableMonthlyAmount );
+    const availableDailyAmount = useSelector( state => state.transactions.availableDailyAmount );
     const [expensesItems, setExpensesItems] = useState([]);
     const [incomesItems, setIncomesItems] = useState([]);
 
@@ -33,7 +34,14 @@ export function RecurringConfigurationPage( {navigation} ) {
 
     return (
         <SafeAreaView style={[styles.content]}>
-            <View style={[{ flexDirection: "row", justifyContent: "center", marginTop: 20}]}>
+
+            <View style={[{ justifyContent: "center", alignItems: "center", marginTop: 10}]}>
+                <Text style={[styles.white, { fontWeight: "bold", fontSize: 13}]}>Reste à vivre</Text>
+                <Text style={[styles.white, { fontWeight: "bold", fontSize: 20}]}>{availableMonthlyAmount?.toFixed(2)} €</Text>
+                <Text style={[styles.white, { fontSize: 15}]}>{availableDailyAmount?.toFixed(2)} € / jour</Text>
+            </View>
+
+            <View style={[{ flexDirection: "row", justifyContent: "center", marginTop: 10}]}>
                 <Pressable style={[styles.roundTabButton, selectedTab == 1 ? styles.roundTabButtonSelected : null ]} onPress={ () => setSelectedTab(1) }>
                     <Text style={ styles.roundTabButtonText }>Revenus réguliers</Text>
                 </Pressable >
