@@ -40,7 +40,9 @@ export function RecurringConfigurationPage( {navigation} ) {
     }
 
     function back(): void {
-        navigation.navigate('HomePage');
+        if (recurringTransactions.length > 0) {
+            navigation.navigate('HomePage');
+        }
     }
 
     return (
