@@ -24,7 +24,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.katsuo.captainfinance",
-      "versionCode": 9
+      "versionCode": 14
     },
     "web": {
       "favicon": "./assets/favicon.png"

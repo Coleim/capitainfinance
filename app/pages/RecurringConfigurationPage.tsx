@@ -31,7 +31,7 @@ export function RecurringConfigurationPage( {navigation} ) {
             // Prevent default behavior of leaving the screen
             e.preventDefault();
         }
-    ), [navigation]);
+    ), [navigation, recurringTransactions]);
 
 
     function addNewTransaction(): void {

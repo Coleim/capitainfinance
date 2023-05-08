@@ -20,9 +20,10 @@ export const HomePage = ({ navigation }) => {
     }, [recurringTransactions]);
 
     useEffect(() => {
+        // dispatch(resetStore(new Date()));
         dispatch(setToday(new Date()));
         // const today = new Date();
-        // dispatch(resetStore(new Date()));
+        // 
         // const pastDate = new Date(today.getFullYear(), today.getMonth()-1, 25)
         // dispatch(addTransaction('Salaire Clement', 3100, 'SALAIRE', undefined, true));
         // dispatch(addTransaction('Test RECENT', -10, 'TEST'));

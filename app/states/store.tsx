@@ -10,6 +10,7 @@ const persistConfig = {
   storage: AsyncStorage,
   stateReconciler: autoMergeLevel2,
   version: 1,
+  // https://github.com/rt2zz/redux-persist/blob/master/docs/migrations.md
 }
 const persistedReducer = persistReducer(persistConfig, reducers);
 
@@ -20,7 +21,7 @@ const store = configureStore({
 
 
 const persistor = persistStore(store);
-console.log("   --- store.getState() --- " , store.getState())
+// console.log("   --- store.getState() --- " , store.getState())
 
 export { store, persistor };
 
