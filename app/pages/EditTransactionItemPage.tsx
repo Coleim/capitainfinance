@@ -11,6 +11,7 @@ export function EditTransactionItemPage( { route } ) {
         label: "",
         amount: 0,
         category: "",
+        date: recurring ? undefined : new Date(),
         isReccuring: recurring
     };
     const isExpense: boolean = route.params.isExpense;

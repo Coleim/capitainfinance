@@ -23,7 +23,7 @@ export const updateTransaction = (transaction: Transaction, label: string, amoun
         amount
     } });
 
-export const addTransaction = (label: string, amount: number, category: string, date: Date = new Date(), recurring: boolean = false) => ({ 
+export const addTransaction = (label: string, amount: number, category: string, date: Date | undefined, recurring: boolean = false) => ({ 
     type: recurring ? ADD_RECURRING_TRANSACTION : ADD_TRANSACTION, 
     transaction: { 
         transaction_id: Crypto.randomUUID(),

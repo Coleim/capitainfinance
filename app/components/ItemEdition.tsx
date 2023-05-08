@@ -37,7 +37,8 @@ export function ItemEdition(props) {
       if(item.transaction_id) {
         dispatch(updateTransaction(item, label, amount));
       } else {
-        dispatch(addTransaction(label, amount, "OTHER", undefined, item.isReccuring));
+        const date = item.isReccuring ? undefined : new Date();
+        dispatch(addTransaction(label, amount, "OTHER", date, item.isReccuring));
       }
       back();
     }

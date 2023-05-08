@@ -21,7 +21,18 @@ export function RecurringConfigurationPage( {navigation} ) {
         const incomes = recurringTransactions.filter(item => item.amount > 0);
         setExpensesItems(expenses);
         setIncomesItems(incomes);
-    }, [recurringTransactions]);  
+    }, [recurringTransactions]);
+
+    useEffect(() =>
+        navigation.addListener('beforeRemove', (e) => {
+            if (recurringTransactions.length > 0) {
+                return;
+            }
+            // Prevent default behavior of leaving the screen
+            e.preventDefault();
+        }
+    ), [navigation]);
+
 
     function addNewTransaction(): void {
         let isExpense = selectedTab == 2;
