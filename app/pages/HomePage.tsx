@@ -20,8 +20,8 @@ export const HomePage = ({ navigation }) => {
     }, [recurringTransactions]);
 
     useEffect(() => {
-        // dispatch(resetStore(new Date()));
         dispatch(setToday(new Date()));
+        // dispatch(resetStore(new Date()));
         // const today = new Date();
         // 
         // const pastDate = new Date(today.getFullYear(), today.getMonth()-1, 25)

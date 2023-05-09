@@ -56,6 +56,7 @@ export function BurndownChart() {
             ]
           }}
           width={Dimensions.get("window").width - 20} // from react-native
+          yLabelsOffset={5}
           height={220}
           yAxisSuffix="€"
           hidePointsAtIndex={ hidePointsAt }
@@ -63,7 +64,7 @@ export function BurndownChart() {
           chartConfig={{
             backgroundGradientFrom: "#fff",
             backgroundGradientTo: "#fff",
-            decimalPlaces: 2,
+            decimalPlaces: 0,
             fillShadowGradientFrom: "#fff",
             fillShadowGradientTo: "#fff",
             color: (opacity = 1) => `rgba(100, 100, 255, 1)`,

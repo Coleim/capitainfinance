@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Easing, StyleSheet, Text, View } from "react-native";
 import { date } from "../services/DateAsString";
 import { useSelector } from "react-redux";
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
-import { useCallback, useEffect, useState } from "react";
+import { RefObject, createRef, useCallback, useEffect, useRef, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
 
@@ -23,18 +23,17 @@ export function AmountSummary({ navigation }) {
   const red = "#e91e63";
   const orange = "#e9a41e";
   const green = "#1ee9a4";
+  
+  let circularProgressRef: RefObject<AnimatedCircularProgress> = createRef();
+  let fill = (remainingAmountAsPerToday / availableMonthlyAmount) * 100;
 
-  const [fill, setFill] = useState(undefined);
-
-  useFocusEffect(
-    useCallback(() => {
+  useEffect(() => {
+    console.log("Use effect")
       if(availableMonthlyAmount !== 0) {
         const newFill = (remainingAmountAsPerToday / availableMonthlyAmount) * 100;
-        setFill(newFill);
+        circularProgressRef?.current?.animate(newFill, 400, Easing.ease);
       }
-      return () => {};
-    }, [availableMonthlyAmount])
-  );
+  }, [remainingAmountAsPerToday, availableMonthlyAmount]);
   
   const tintColor = () => {
     if (fill >= 70) {
@@ -55,34 +54,32 @@ export function AmountSummary({ navigation }) {
   return (
     <View style={styles.amountSummary}>
       <View style={{ alignItems: "center", justifyContent: "center", alignContent: "center", paddingBottom: 5 }} >
-        {/* <Text style={[styles.white, { textAlign: "center" }]}>Montant disponible en</Text> */}
         <Text style={[styles.white, { fontWeight: "bold", fontSize: 20, textAlign: "center" }]}>{date.GetMonthAsString(today)}</Text>
       </View>
 
       <View style={{ flexDirection: "row", justifyContent: "space-evenly", alignContent: "center", width: "100%" }}>
         <View>
-          { fill && 
-            <AnimatedCircularProgress
-              size={160}
-              width={15}
-              fill={fill}
-              rotation={-100}
-              arcSweepAngle={200}
-              lineCap="round"
-              tintColor={tintColor()}
-              backgroundColor="#3d5875">
-              {
-                (fill) => (
-                  <>
-                    <Text style={[styles.white, { fontWeight: "bold", fontSize: 18 }]} >{formatNumber(remainingAmountAsPerToday)} €</Text>
-                    <Text style={[styles.white, { fontSize: 14 }]}>{formatNumber(amountPerDayUntilEndOfMonth)} € / jour </Text>
-                    <Text style={[styles.white, { fontSize: 12 }]}>Dépensé</Text>
-                    <Text style={[styles.white, { fontSize: 10, paddingBottom: 15 }]}>{dailyAmountSpent?.toFixed(2)} € / jour </Text>
-                  </>
-                )
-              }
-            </AnimatedCircularProgress>
-          }
+          <AnimatedCircularProgress
+            size={160}
+            width={15}
+            ref={circularProgressRef}
+            fill={0}
+            rotation={-100}
+            arcSweepAngle={200}
+            lineCap="round"
+            tintColor={tintColor()}
+            backgroundColor="#3d5875">
+            {
+              (fill) => (
+                <>
+                  <Text style={[styles.white, { fontWeight: "bold", fontSize: 18 }]} >{formatNumber(remainingAmountAsPerToday)} €</Text>
+                  <Text style={[styles.white, { fontSize: 14 }]}>{formatNumber(amountPerDayUntilEndOfMonth)} € / jour </Text>
+                  <Text style={[styles.white, { fontSize: 12 }]}>Dépensé</Text>
+                  <Text style={[styles.white, { fontSize: 10, paddingBottom: 15 }]}>{dailyAmountSpent?.toFixed(2)} € / jour </Text>
+                </>
+              )
+            }
+          </AnimatedCircularProgress>
         </View>
       </View>
     </View>
