@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { RecurringTransactions } from "../components/RecurringTransactions";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
+import { MenuBar } from "../components/MenuBar";
 
   
 export function RecurringConfigurationPage( {navigation} ) {
@@ -34,16 +35,16 @@ export function RecurringConfigurationPage( {navigation} ) {
     ), [navigation, recurringTransactions]);
 
 
-    function addNewTransaction(): void {
-        let isExpense = selectedTab == 2;
-        navigation.navigate('EditTransactionItemPage', { item: null, isExpense, recurring: true } );
-    }
+    // function addNewTransaction(): void {
+    //     let isExpense = selectedTab == 2;
+    //     navigation.navigate('EditTransactionItemPage', { item: null, isExpense, recurring: true } );
+    // }
 
-    function back(): void {
-        if (recurringTransactions.length > 0) {
-            navigation.navigate('HomePage');
-        }
-    }
+    // function back(): void {
+    //     if (recurringTransactions.length > 0) {
+    //         navigation.navigate('HomePage');
+    //     }
+    // }
 
     return (
         <SafeAreaView style={[styles.content]}>
@@ -84,23 +85,9 @@ export function RecurringConfigurationPage( {navigation} ) {
                     <Text style={ { width: "80%", color: "#fff", fontSize: 25, textAlign: "center", marginLeft: "auto", marginRight: "auto", marginTop: "auto", marginBottom: "auto"} }> Entrez vos dépenses régulières mensuelle {"\n"} {"\n"}(Loyer, Electricité, Internet, ...) {"\n"}{"\n"} ↓</Text>
                 </View>
             }
-            
-            <View style={ styles.vCenterContent }>
-                <Pressable style={styles.roundTabButton} onPress={ () => addNewTransaction() }>
-                    { selectedTab == 1 ? 
-                        <Text style={ styles.actionText }> Ajouter un revenu régulier </Text> : 
-                        <Text style={ styles.actionText }> Ajouter une dépense régulière </Text>
-                    }
-                </Pressable>
-            </View>
 
-            <View style={ styles.vCenterContent }>
-                { (expensesItems.length != 0 || incomesItems.length != 0) &&
-                    <Pressable style={[styles.roundTabButton, {backgroundColor: "#fff" }]} onPress={ () => back() }>
-                        <Text style={ styles.actionText }> Retour </Text>
-                    </Pressable>
-                }
-            </View>
+            <MenuBar navigation={navigation} recurring={true}></MenuBar>
+
         </SafeAreaView>
     );
 }

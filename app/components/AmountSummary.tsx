@@ -2,11 +2,10 @@ import { Easing, StyleSheet, Text, View } from "react-native";
 import { date } from "../services/DateAsString";
 import { useSelector } from "react-redux";
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
-import { RefObject, createRef, useCallback, useEffect, useRef, useState } from "react";
-import { useFocusEffect } from "@react-navigation/native";
+import { RefObject, createRef, useEffect } from "react";
 
 
-export function AmountSummary({ navigation }) {
+export function AmountSummary({ }) {
 
   const today = new Date();
   const numberOfDaysUntilEndOfMonth = (new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate() - today.getDate()) + 1;

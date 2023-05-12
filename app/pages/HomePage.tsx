@@ -23,11 +23,10 @@ export const HomePage = ({ navigation }) => {
         dispatch(setToday(new Date()));
         // dispatch(resetStore(new Date()));
         // const today = new Date();
-        // 
-        // const pastDate = new Date(today.getFullYear(), today.getMonth()-1, 25)
+        // const pastDate = new Date(today.getFullYear(), today.getMonth(), 8)
         // dispatch(addTransaction('Salaire Clement', 3100, 'SALAIRE', undefined, true));
         // dispatch(addTransaction('Test RECENT', -10, 'TEST'));
-        // dispatch(addTransaction('Test PAST', -10, 'TEST', pastDate));
+        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', pastDate));
     }, []);
 
     return (

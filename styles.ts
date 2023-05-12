@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-import Constants from "expo-constants";
 
 export const styles = StyleSheet.create({
     amountSummary: {
@@ -46,23 +45,6 @@ export const styles = StyleSheet.create({
         flex: 1
     },
     bgDark: {
-        // backgroundColor: "#525174",
-        backgroundColor: "#303030",
-        // backgroundColor: "#513B56",
-        // backgroundColor: "#348AA7",
-    },
-    menuBar: {
-        // flex: 1,
-        // flexDirection: "row",
-        // height: 50,
-        // backgroundColor: "#74B3CE",
-        // backgroundColor: "#525174",
-        // backgroundColor: "#fff",
-        // marginTop: "auto",
-        // marginBottom: 5,
-        // marginLeft: 5,
-        // marginRight: 5,
-        // borderRadius: 20,
-        // borderColor: "#fff"
+        backgroundColor: "#303030"
     }
   });

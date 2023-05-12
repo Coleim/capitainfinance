@@ -13,7 +13,7 @@ export function TransactionsContainer( {navigation} ) {
                 <BurndownChart />
             </View>
             <LatestTransactions />
-            <MenuBar navigation={navigation}></MenuBar>
+            <MenuBar navigation={navigation} recurring={false}></MenuBar>
         </View>
     );
 }
