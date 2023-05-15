@@ -41,22 +41,17 @@ export function RecurringConfigurationPage( {navigation} ) {
     return (
         <SafeAreaView style={[styles.content]}>
 
-            <View style={[{ flexDirection: "row", justifyContent: "center",}]}>
+            <View style={[{ flexDirection: "row", justifyContent: "center", marginTop: 10}]}>
                 <View style={{flex: 1, marginRight: "auto"}}>
                     <Ionicons name="md-arrow-back" size={32} color="#fff" onPress={ () => goHome() } />
                 </View>
-                <View style={[{ flex: 1, justifyContent: "center", alignItems: "center", marginTop: 10, marginLeft: "auto"}]}>
+                <View style={[{ flex: 1, justifyContent: "center", alignItems: "center", marginLeft: "auto"}]}>
                     <Text style={[styles.white, { fontWeight: "bold", fontSize: 13}]}>Reste à vivre</Text>
                     <Text style={[styles.white, { fontWeight: "bold", fontSize: 20}]}>{availableMonthlyAmount?.toFixed(2)} €</Text>
                     <Text style={[styles.white, { fontSize: 15}]}>{availableDailyAmount?.toFixed(2)} € / jour</Text>
-
                 </View>
                 <View style={{ flex: 1, marginLeft: "auto"}} />
             </View>
-            
-
-            {/* <View style={[{ justifyContent: "center", alignItems: "center", marginTop: 10}]}>
-            </View> */}
 
             <View style={[{ flexDirection: "row", justifyContent: "center", marginTop: 10}]}>
                 <Pressable style={[styles.roundTabButton, selectedTab == 1 ? styles.roundTabButtonSelected : null ]} onPress={ () => setSelectedTab(1) }>

@@ -26,7 +26,15 @@ export const HomePage = ({ navigation }) => {
         // const pastDate = new Date(today.getFullYear(), today.getMonth(), 8)
         // dispatch(addTransaction('Salaire Clement', 3100, 'SALAIRE', undefined, true));
         // dispatch(addTransaction('Test RECENT', -10, 'TEST'));
-        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', pastDate));
+        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
+        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
+        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
+        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
+        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
+        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
+        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
+
+        
     }, []);
 
     return (
