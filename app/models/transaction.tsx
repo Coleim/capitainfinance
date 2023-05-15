@@ -7,5 +7,7 @@ export interface Transaction {
     category?: string;
     date?: Date;
     endDate?: Date;
+    month?: number;
+    fullYear?: number;
     isReccuring: boolean;
 };

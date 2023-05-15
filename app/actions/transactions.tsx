@@ -24,7 +24,7 @@ export const updateTransaction = (transaction: Transaction, label: string, amoun
     } });
 
 export const addTransaction = (label: string, amount: number, category: string, date: Date | undefined, recurring: boolean = false) => ({ 
-    type: recurring ? ADD_RECURRING_TRANSACTION : ADD_TRANSACTION, 
+    type: recurring ? ADD_RECURRING_TRANSACTION : ADD_TRANSACTION,
     transaction: { 
         transaction_id: Crypto.randomUUID(),
         owner_id: '123', // how to handle that ??
@@ -32,6 +32,8 @@ export const addTransaction = (label: string, amount: number, category: string, 
         amount,
         category,
         date,
+        month: recurring || !date ? new Date().getMonth() : date.getMonth(),
+        fullYear: recurring || !date ? new Date().getFullYear() : date.getFullYear(),
         isReccuring: recurring
     }
 });

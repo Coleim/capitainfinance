@@ -75,7 +75,6 @@ const transactions = (state = initialStateRecurringTransactions, action: any) =>
     }
     const today: Date = action.today ?? state.today;
     const numberOfDaysInMonth = date.GetNumberOfDaysInCurrentMonth(today);
-    let realAvailableAmountPerDay = [];
     let spentPerDay = [];
     
     switch (action.type) {
@@ -184,22 +183,6 @@ const transactions = (state = initialStateRecurringTransactions, action: any) =>
                 spentPerDay: spentPerDay,
                 realAvailableAmountPerDay: getRealAvailableAmountPerDay(state.availableMonthlyAmount, spentPerDay, today)
             }
-            // spentPerDay = fillSpendPerDay(today, state.spentPerDay);
-            // if(action.transaction.date) {
-            //     const actionDate = action.transaction.date as Date;
-            //     if (actionDate.getMonth() === today.getMonth() && actionDate.getFullYear() === today.getFullYear()) {
-            //         if(actionDate.getDate() > today.getDate()) {
-            //             spentPerDay[today.getDate()-1] = Number(spentPerDay[today.getDate()-1]) + action.transaction.amount;
-            //         } else {
-            //             spentPerDay[actionDate.getDate()-1] = Number(spentPerDay[actionDate.getDate()-1]) + action.transaction.amount;
-            //         }
-            //     } else {
-            //         // Add to past transactions ?? 
-            //         return state;
-            //     }
-            // } else {
-            //     spentPerDay[today.getDate()-1] = Number(spentPerDay[today.getDate()-1]) + action.transaction.amount;
-            // }
         }
         case UPDATE_TRANSACTION: {
             const updatedTransaction = action.transaction;
@@ -215,16 +198,6 @@ const transactions = (state = initialStateRecurringTransactions, action: any) =>
                     return transaction;
                 }
             });
-        
-            // const updatedSpentPerDay = fillSpendPerDay(today, []);
-            // updatedTransactionList.forEach((transaction: Transaction) => {
-            //     if(transaction.date) {
-            //         const transactionDate = new Date(transaction.date);
-            //         if (transactionDate.getMonth() === today.getMonth() && transactionDate.getFullYear() === today.getFullYear()) {
-            //             updatedSpentPerDay[transactionDate.getDate() - 1] += transaction.amount;
-            //         }
-            //     }
-            // });
             const updatedSpentPerDay = calculateSpendPerDay(today, updatedTransactionList);
             const updatedRealAvailableAmountPerDay = getRealAvailableAmountPerDay(state.availableMonthlyAmount, updatedSpentPerDay, today);
             
@@ -238,17 +211,6 @@ const transactions = (state = initialStateRecurringTransactions, action: any) =>
         case REMOVE_TRANSACTION: {
             const removedTransaction = action.transaction;
             const updatedTransactionList = state.currentMonthDailyTransactions.filter(t => t.transaction_id !== removedTransaction.transaction_id);
-
-            // const updatedSpentPerDay = fillSpendPerDay(today, []);
-            // transactions.forEach((transaction) => {
-            //     if(transaction.date) {
-            //         const transactionDate = new Date(transaction.date);
-            //         if (transactionDate.getMonth() === today.getMonth() && transactionDate.getFullYear() === today.getFullYear()) {
-            //             updatedSpentPerDay[transactionDate.getDate() - 1] += transaction.amount;
-            //         }
-            //     }
-            // });
-            
             const updatedSpentPerDay = calculateSpendPerDay(today, updatedTransactionList);
             const updatedRealAvailableAmountPerDay = getRealAvailableAmountPerDay(state.availableMonthlyAmount, updatedSpentPerDay, today);
             return {

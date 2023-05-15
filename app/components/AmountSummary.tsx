@@ -1,11 +1,11 @@
-import { Easing, StyleSheet, Text, View } from "react-native";
+import { Easing, Pressable, StyleSheet, Text, View } from "react-native";
 import { date } from "../services/DateAsString";
 import { useSelector } from "react-redux";
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { RefObject, createRef, useEffect } from "react";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
-
-export function AmountSummary({ }) {
+export function AmountSummary({ navigation }) {
 
   const today = new Date();
   const numberOfDaysUntilEndOfMonth = (new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate() - today.getDate()) + 1;
@@ -50,11 +50,42 @@ export function AmountSummary({ }) {
   }
 
 
+  function openRecurringConfigurationPage(): void {
+    navigation.navigate('RecurringConfigurationPage');
+    // throw new Error("Function not implemented.");
+  }
+
+  function openConfiguration(): void {
+    // throw new Error("Function not implemented.");
+  }
+
   return (
     <View style={styles.amountSummary}>
-      <View style={{ alignItems: "center", justifyContent: "center", alignContent: "center", paddingBottom: 5 }} >
-        <Text style={[styles.white, { fontWeight: "bold", fontSize: 20, textAlign: "center" }]}>{date.GetMonthAsString(today)}</Text>
+      <View style={{ flexDirection: "row", paddingBottom: 5, marginTop: 10 }} >
+        <View style={ { flex: 1, marginLeft: 15 }} >
+          <Pressable  style={ { flex: 1, flexDirection: "column", justifyContent: "center", alignItems: "center", marginRight: "auto" }} onPress={ () => openConfiguration() }>
+            <Ionicons name="md-settings" size={15} color="#fff" style={{zIndex: 3, height: 15, marginBottom: 5 }} />
+            <Text style={ { color: "#fff", marginRight: 5, fontSize: 10, alignSelf: "baseline"} }>Configuration</Text>
+          </Pressable >
+        </View>
+        
+        <View style={ { flex: 1 }} >
+          <Text style={[styles.white, { fontWeight: "bold", fontSize: 20, textAlign: "center" }]}>{date.GetMonthAsString(today)}</Text>
+        </View>
+
+        <View style={ { flex: 1, marginRight: 15 }} >
+          <Pressable style={ { marginLeft: "auto", flexDirection: "column", justifyContent: "center", alignItems: "center" }} onPress={ () => openRecurringConfigurationPage() }>
+              <Ionicons name="md-sync-circle-outline" size={15} color="#fff" style={{zIndex: 3, height: 15, marginBottom: 5 }} />
+              <Text style={ { color: "#fff", marginRight: 5, fontSize: 10, alignSelf: "baseline"} }>Transactions</Text>
+              <Text style={ { color: "#fff", marginRight: 5, fontSize: 10, alignSelf: "baseline"} }>récurrentes</Text>
+          </Pressable >
+
+        </View>
+
+
+
       </View>
+
 
       <View style={{ flexDirection: "row", justifyContent: "space-evenly", alignContent: "center", width: "100%" }}>
         <View>
@@ -89,8 +120,8 @@ export function AmountSummary({ }) {
 
 export const styles = StyleSheet.create({
   amountSummary: {
-    alignItems: "center",
-    justifyContent: "center",
+    // alignItems: "center",
+    // justifyContent: "center",
     marginBottom: -40
   },
   white: {

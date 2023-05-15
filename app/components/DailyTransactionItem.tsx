@@ -19,6 +19,7 @@ export function DailyTransactionItem(props) {
                 <View style={ { flexDirection: "column"} }>
                     <Text style={ { color: "#525174", fontSize: 15 } } >{item.label}</Text>
                     <Text style={ { fontSize: 10 } } >{ date.AsString(new Date(item.date)) } </Text>
+                    <Text style={ { fontSize: 10 } } > month: {item.month} - year: {item.fullYear} </Text>
                 </View>
                 <Text style={ [{ marginLeft: "auto", fontWeight: "bold" }, item.amount > 0 ? {color: "#06d6a0"}: {color: "#ef476f"}] } >{item.amount.toFixed(2)} €</Text>
             </View>

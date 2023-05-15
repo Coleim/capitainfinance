@@ -5,7 +5,7 @@ import { RecurringTransactions } from "../components/RecurringTransactions";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { MenuBar } from "../components/MenuBar";
-
+import Ionicons from '@expo/vector-icons/Ionicons';
   
 export function RecurringConfigurationPage( {navigation} ) {
 
@@ -34,26 +34,29 @@ export function RecurringConfigurationPage( {navigation} ) {
         }
     ), [navigation, recurringTransactions]);
 
-
-    // function addNewTransaction(): void {
-    //     let isExpense = selectedTab == 2;
-    //     navigation.navigate('EditTransactionItemPage', { item: null, isExpense, recurring: true } );
-    // }
-
-    // function back(): void {
-    //     if (recurringTransactions.length > 0) {
-    //         navigation.navigate('HomePage');
-    //     }
-    // }
+    function goHome(): void {
+        navigation.navigate('HomePage');
+    }
 
     return (
         <SafeAreaView style={[styles.content]}>
 
-            <View style={[{ justifyContent: "center", alignItems: "center", marginTop: 10}]}>
-                <Text style={[styles.white, { fontWeight: "bold", fontSize: 13}]}>Reste à vivre</Text>
-                <Text style={[styles.white, { fontWeight: "bold", fontSize: 20}]}>{availableMonthlyAmount?.toFixed(2)} €</Text>
-                <Text style={[styles.white, { fontSize: 15}]}>{availableDailyAmount?.toFixed(2)} € / jour</Text>
+            <View style={[{ flexDirection: "row", justifyContent: "center",}]}>
+                <View style={{flex: 1, marginRight: "auto"}}>
+                    <Ionicons name="md-arrow-back" size={32} color="#fff" onPress={ () => goHome() } />
+                </View>
+                <View style={[{ flex: 1, justifyContent: "center", alignItems: "center", marginTop: 10, marginLeft: "auto"}]}>
+                    <Text style={[styles.white, { fontWeight: "bold", fontSize: 13}]}>Reste à vivre</Text>
+                    <Text style={[styles.white, { fontWeight: "bold", fontSize: 20}]}>{availableMonthlyAmount?.toFixed(2)} €</Text>
+                    <Text style={[styles.white, { fontSize: 15}]}>{availableDailyAmount?.toFixed(2)} € / jour</Text>
+
+                </View>
+                <View style={{ flex: 1, marginLeft: "auto"}} />
             </View>
+            
+
+            {/* <View style={[{ justifyContent: "center", alignItems: "center", marginTop: 10}]}>
+            </View> */}
 
             <View style={[{ flexDirection: "row", justifyContent: "center", marginTop: 10}]}>
                 <Pressable style={[styles.roundTabButton, selectedTab == 1 ? styles.roundTabButtonSelected : null ]} onPress={ () => setSelectedTab(1) }>
@@ -85,6 +88,15 @@ export function RecurringConfigurationPage( {navigation} ) {
                     <Text style={ { width: "80%", color: "#fff", fontSize: 25, textAlign: "center", marginLeft: "auto", marginRight: "auto", marginTop: "auto", marginBottom: "auto"} }> Entrez vos dépenses régulières mensuelle {"\n"} {"\n"}(Loyer, Electricité, Internet, ...) {"\n"}{"\n"} ↓</Text>
                 </View>
             }
+
+            {/* <View style={[{ flexDirection: "row", justifyContent: "center", marginTop: 10}]}>
+                <Pressable style={[styles.roundTabButton, selectedTab == 1 ? styles.roundTabButtonSelected : null ]} onPress={ () => setSelectedTab(1) }>
+                    <Text style={ styles.roundTabButtonText }>Revenus réguliers</Text>
+                </Pressable >
+                <Pressable style={[styles.roundTabButton, , selectedTab == 2 ? styles.roundTabButtonSelected : null]} onPress={ () => setSelectedTab(2) }>
+                    <Text style={ styles.roundTabButtonText }>Dépenses régulières</Text>
+                </Pressable>
+            </View> */}
 
             <MenuBar navigation={navigation} recurring={true}></MenuBar>
 
