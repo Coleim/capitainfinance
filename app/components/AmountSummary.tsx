@@ -79,7 +79,7 @@ export function AmountSummary({ navigation }) {
         </View>
       </View> */}
 
-<Text style={[styles.white, { fontWeight: "bold", fontSize: 20, textAlign: "center" }]}>{date.GetMonthAsString(today)}</Text>
+      <Text style={[styles.white, { fontWeight: "bold", fontSize: 20, textAlign: "center" }]}>{date.GetMonthAsString(today)}</Text>
       {/* <View style={{ flexDirection: "row", paddingBottom: 5, marginTop: 10 }} >
         <View style={ { flex: 1, marginLeft: 15 }} >
         </View>
@@ -92,7 +92,7 @@ export function AmountSummary({ navigation }) {
         </View>
       </View> */}
 
-      <View style={{ flexDirection: "row", paddingBottom: 5, marginTop: 10 }} >
+      <View style={{ flexDirection: "row", paddingBottom: 5, marginTop: 5 }} >
         <View style={ { flex: 1}} >
         </View>
         
@@ -145,7 +145,7 @@ export const styles = StyleSheet.create({
   amountSummary: {
     // alignItems: "center",
     // justifyContent: "center",
-    marginBottom: -40
+    marginBottom: -50
   },
   white: {
     color: "#fff"

@@ -5,6 +5,8 @@ export namespace date {
                         "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
 
     export const GetNumberOfDaysInCurrentMonth = (today: Date) => {
+        console.log("GetNumberOfDaysInCurrentMonth")
+        console.log(today)
         const numberOfDays = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
         return numberOfDays;
     }

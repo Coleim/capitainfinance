@@ -1,7 +1,5 @@
 import { Dimensions, View } from "react-native";
-import {
-  LineChart,
-} from "react-native-chart-kit";
+import { LineChart } from "react-native-chart-kit";
 import { useSelector } from "react-redux";
 
 
@@ -80,7 +78,7 @@ export function BurndownChart() {
             }
           }}
           style={{
-            marginVertical: 8,
+            //marginVertical: 8,
             borderRadius: 8
           }}
         />

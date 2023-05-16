@@ -192,7 +192,8 @@ const transactions = (state = initialStateRecurringTransactions, action: any) =>
                         ...transaction,
                         label: updatedTransaction.label,
                         amount: updatedTransaction.amount,
-                        category: updatedTransaction.category
+                        category: updatedTransaction.category,
+                        date: updatedTransaction.date
                     }
                 } else {
                     return transaction;

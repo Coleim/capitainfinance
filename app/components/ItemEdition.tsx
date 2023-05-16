@@ -1,10 +1,12 @@
-import { Alert, Button, Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Button, Modal, Pressable, StyleSheet, Text, TextInput, View, Platform } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from "react";
-import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+import RNDateTimePicker, { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { Transaction } from "../models/transaction";
 import { useDispatch } from "react-redux";
 import { addTransaction, removeTransaction, updateTransaction } from "../actions/transactions";
+import { date } from "../services/DateAsString";
 
 export function ItemEdition(props) {
   const item: Transaction = props.item;
@@ -13,7 +15,7 @@ export function ItemEdition(props) {
   const dispatch = useDispatch();
 
   const [amountStr, setAmountStr] = useState(item.amount.toString());
-  const [startDate, setStartDate] = useState(item.date);
+  const [startDate, setStartDate] = useState(new Date(item.date));
   // const [category, setCategory] = useState(item.category);
   const [label, setLabel] = useState(item.label);
   const [modalVisible, setModalVisible] = useState(false);
@@ -31,13 +33,14 @@ export function ItemEdition(props) {
   });
 
 
-  async function saveItem(): Promise<void> {
+  function saveItem() {
     if (validateAmountNumber() && !saveDisabled) {
       let amount = getCorrectNumber();
+      const date = item.isReccuring ? undefined : startDate? new Date(startDate) : new Date();
+      console.log(date)
       if(item.transaction_id) {
-        dispatch(updateTransaction(item, label, amount));
+        dispatch(updateTransaction(item, label, amount, date));
       } else {
-        const date = item.isReccuring ? undefined : new Date();
         dispatch(addTransaction(label, amount, "OTHER", date, item.isReccuring));
       }
       back();
@@ -58,15 +61,21 @@ export function ItemEdition(props) {
 
   const onStartDateChange = (event, selectedDate) => {
     const currentDate = selectedDate;
-    // setDate(currentDate);
+    setStartDate(currentDate);
   };
 
-  const showStartDatePicker = () => {
-    DateTimePickerAndroid.open({
-      value: startDate ? startDate : new Date(),
-      onChange: onStartDateChange,
-      mode: 'date'
-    });
+  const showDatePicker = () => {
+    console.log(Platform.OS)
+    const today = new Date();
+    if(Platform.OS === 'android') {
+      DateTimePickerAndroid.open({
+        value: startDate ? startDate : new Date(),
+        onChange: onStartDateChange,
+        mode: 'date',
+        maximumDate: today,
+        minimumDate: new Date(today.getFullYear(), today.getMonth(), 1)
+      });
+    }
   };
 
   const getCorrectNumber = () => {
@@ -76,8 +85,6 @@ export function ItemEdition(props) {
     }
     return amountNbr;
   }
-  
-
 
   const validateAmountNumber = () => {
     let amountNbr = getCorrectNumber();
@@ -91,12 +98,12 @@ export function ItemEdition(props) {
   }
 
 
-  async function openConfirmModal(): Promise<void> {
+  function openConfirmModal() {
     setModalVisible(true);
   }
 
 
-  async function deleteTransaction() {
+  function deleteTransaction() {
     setModalVisible(false);
     dispatch(removeTransaction(item));
     back();
@@ -123,7 +130,12 @@ export function ItemEdition(props) {
 
 
       { !item.isReccuring &&
-        <Text style={itemStyle.header}>DATE</Text>
+        <>
+          <Text style={itemStyle.header}>Date</Text>
+          <Pressable onPress={() => showDatePicker()} style={itemStyle.container}>
+            <Text style={{ color: "#525174", fontSize: 15 }}>{date.AsString(startDate)}</Text>
+          </Pressable>
+        </>
       }
 
 
