@@ -18,6 +18,13 @@ export function MenuBar(props) {
     navigation.navigate('EditTransactionItemPage', { item: null, isExpense: false, recurring: isRecurring });
   }
 
+  function goHome(): void {
+    navigation.navigate('HomePage');
+  }
+
+  function openConfiguration(): void {
+  }
+
 
 
   return (
@@ -32,9 +39,28 @@ export function MenuBar(props) {
       <View style={{ position: 'absolute', backgroundColor: '#303030', bottom: 0, zIndex: 1, width: '100%', height: 60, 
         flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 10 }}>
         
+        { isRecurring && <View style={{flex: 1, marginRight: "auto"}}>
+          <Ionicons name="md-arrow-back" size={32} color="#fff" onPress={ () => goHome() } />
+        </View> }
+
+        { !isRecurring &&
+          <Pressable  style={ { flexDirection: "column", justifyContent: "center", alignItems: "center", marginRight: "auto" }} onPress={ () => openConfiguration() }>
+            <Ionicons name="md-settings" size={15} color="#fff" style={{zIndex: 4, height: 15, marginBottom: 5 }} />
+            <Text style={ { color: "#fff", marginRight: 5, fontSize: 10, alignSelf: "baseline"} }>Configuration</Text>
+          </Pressable >
+        }
+
         {/* { !isRecurring && <Ionicons name="md-settings" size={15} color="#fff" /> } */}
         {/* { isRecurring && <Ionicons name="md-arrow-back" size={32} color="#fff" onPress={ () => goHome() } /> } */}
         
+
+        { !isRecurring &&
+          <Pressable style={ { marginLeft: "auto", flexDirection: "column", justifyContent: "center", alignItems: "center" }} onPress={ () => openRecurringConfigurationPage() }>
+            <Ionicons name="md-sync-circle-outline" size={15} color="#fff" style={{zIndex: 3, height: 15, marginBottom: 5 }} />
+            <Text style={ { color: "#fff", marginRight: 5, fontSize: 10, alignSelf: "baseline"} }>Transactions</Text>
+            <Text style={ { color: "#fff", marginRight: 5, fontSize: 10, alignSelf: "baseline"} }>récurrentes</Text>
+          </Pressable >
+        }
 
         
         {/* <View style={{ flexDirection: 'row' }}>

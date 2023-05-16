@@ -11,6 +11,7 @@ export function AmountSummary({ navigation }) {
   const numberOfDaysUntilEndOfMonth = (new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate() - today.getDate()) + 1;
 
   const availableMonthlyAmount = useSelector(state => state.transactions.availableMonthlyAmount);
+  const availableDailyAmount = useSelector( state => state.transactions.availableDailyAmount );
   const realAvailableAmountPerDay = useSelector(state => state.transactions.realAvailableAmountPerDay);
   const remainingAmountAsPerToday = realAvailableAmountPerDay.at(today.getDate() - 1);
   const amountPerDayUntilEndOfMonth = Number((remainingAmountAsPerToday / numberOfDaysUntilEndOfMonth).toFixed(2));
@@ -52,16 +53,12 @@ export function AmountSummary({ navigation }) {
 
   function openRecurringConfigurationPage(): void {
     navigation.navigate('RecurringConfigurationPage');
-    // throw new Error("Function not implemented.");
   }
 
-  function openConfiguration(): void {
-    // throw new Error("Function not implemented.");
-  }
 
   return (
     <View style={styles.amountSummary}>
-      <View style={{ flexDirection: "row", paddingBottom: 5, marginTop: 10 }} >
+      {/* <View style={{ flexDirection: "row", paddingBottom: 5, marginTop: 10 }} >
         <View style={ { flex: 1, marginLeft: 15 }} >
           <Pressable  style={ { flex: 1, flexDirection: "column", justifyContent: "center", alignItems: "center", marginRight: "auto" }} onPress={ () => openConfiguration() }>
             <Ionicons name="md-settings" size={15} color="#fff" style={{zIndex: 3, height: 15, marginBottom: 5 }} />
@@ -79,16 +76,27 @@ export function AmountSummary({ navigation }) {
               <Text style={ { color: "#fff", marginRight: 5, fontSize: 10, alignSelf: "baseline"} }>Transactions</Text>
               <Text style={ { color: "#fff", marginRight: 5, fontSize: 10, alignSelf: "baseline"} }>récurrentes</Text>
           </Pressable >
+        </View>
+      </View> */}
 
+<Text style={[styles.white, { fontWeight: "bold", fontSize: 20, textAlign: "center" }]}>{date.GetMonthAsString(today)}</Text>
+      {/* <View style={{ flexDirection: "row", paddingBottom: 5, marginTop: 10 }} >
+        <View style={ { flex: 1, marginLeft: 15 }} >
+        </View>
+        
+        <View style={ { flex: 1 }} >
+          <Text style={[styles.white, { fontWeight: "bold", fontSize: 20, textAlign: "center" }]}>{date.GetMonthAsString(today)}</Text>
         </View>
 
+        <View style={ { flex: 1, flexDirection: "row" }} >
+        </View>
+      </View> */}
 
-
-      </View>
-
-
-      <View style={{ flexDirection: "row", justifyContent: "space-evenly", alignContent: "center", width: "100%" }}>
-        <View>
+      <View style={{ flexDirection: "row", paddingBottom: 5, marginTop: 10 }} >
+        <View style={ { flex: 1}} >
+        </View>
+        
+        <View style={ { }} >
           <AnimatedCircularProgress
             size={160}
             width={15}
@@ -111,7 +119,22 @@ export function AmountSummary({ navigation }) {
             }
           </AnimatedCircularProgress>
         </View>
+
+        <View style={ { flex: 1 }} >
+          <View style={ { flex: 1, marginLeft: "auto", marginRight: 10 }} >
+            <Text style={[styles.white, { fontSize: 12}]}>Théorique</Text>
+            <Text style={[styles.white, { fontSize: 13}]}>{availableMonthlyAmount?.toFixed(2)} €</Text>
+            <Text style={[styles.white, { fontSize: 12}]}>{availableDailyAmount?.toFixed(2)} € / jour</Text>
+          </View>
+        </View>
       </View>
+
+
+      {/* <View style={{ flexDirection: "row", justifyContent: "space-evenly", alignContent: "center", width: "100%" }}>
+        <View>
+          
+        </View>
+      </View> */}
     </View>
   );
 }

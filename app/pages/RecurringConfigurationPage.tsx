@@ -41,7 +41,7 @@ export function RecurringConfigurationPage( {navigation} ) {
     return (
         <SafeAreaView style={[styles.content]}>
 
-            <View style={[{ flexDirection: "row", justifyContent: "center", marginTop: 10}]}>
+            {/* <View style={[{ flexDirection: "row", justifyContent: "center", marginTop: 10}]}>
                 <View style={{flex: 1, marginRight: "auto"}}>
                     <Ionicons name="md-arrow-back" size={32} color="#fff" onPress={ () => goHome() } />
                 </View>
@@ -51,6 +51,12 @@ export function RecurringConfigurationPage( {navigation} ) {
                     <Text style={[styles.white, { fontSize: 15}]}>{availableDailyAmount?.toFixed(2)} € / jour</Text>
                 </View>
                 <View style={{ flex: 1, marginLeft: "auto"}} />
+            </View> */}
+
+            <View style={[{ justifyContent: "center", alignItems: "center"}]}>
+                <Text style={[styles.white, { fontWeight: "bold", fontSize: 13}]}>Reste à vivre</Text>
+                <Text style={[styles.white, { fontWeight: "bold", fontSize: 20}]}>{availableMonthlyAmount?.toFixed(2)} €</Text>
+                <Text style={[styles.white, { fontSize: 15}]}>{availableDailyAmount?.toFixed(2)} € / jour</Text>
             </View>
 
             <View style={[{ flexDirection: "row", justifyContent: "center", marginTop: 10}]}>

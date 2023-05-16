@@ -9,7 +9,6 @@ export function LatestTransactions() {
   const dailyTransactions = useSelector( state => state.transactions.currentMonthDailyTransactions );
 
   function viewStats(): void {
-    throw new Error("Function not implemented.");
   }
 
   return (
