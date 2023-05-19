@@ -22,17 +22,17 @@ export const HomePage = ({ navigation }) => {
     useEffect(() => {
         dispatch(setToday(new Date()));
         // dispatch(resetStore(new Date()));
-        const today = new Date();
+        // const today = new Date();
         // const pastDate = new Date(today.getFullYear(), today.getMonth(), 8)
         // dispatch(addTransaction('Salaire Clement', 3100, 'SALAIRE', undefined, true));
         // dispatch(addTransaction('Test RECENT', -10, 'TEST'));
-        dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
-        dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
-        dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
-        dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
-        dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
-        dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
-        dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
+        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
+        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
+        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
+        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
+        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
+        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
+        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
 
         
     }, []);
