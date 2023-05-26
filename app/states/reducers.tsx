@@ -249,7 +249,7 @@ const transactions = (state = initialStateRecurringTransactions, action: any) =>
                 realAvailableAmountPerDay: getRealAvailableAmountPerDay(state.availableMonthlyAmount, spentPerDay, today)
             }
         default:
-            return initialStateRecurringTransactions;
+            return state;
     }
 };
 
