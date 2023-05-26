@@ -1,12 +1,46 @@
-import { Alert, Button, Modal, Pressable, StyleSheet, Text, TextInput, View, Platform } from "react-native";
+import { Alert, Button, Modal, Pressable, StyleSheet, Text, TextInput, View, Platform, FlatList } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from "react";
-import RNDateTimePicker, { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import { Transaction } from "../models/transaction";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addTransaction, removeTransaction, updateTransaction } from "../actions/transactions";
 import { date } from "../services/DateAsString";
+import { addCategory } from "../actions/categories";
+import { Category } from "../models/Category";
+
+
+function CategoryItem(props) {
+  const item: Category = props.item;
+
+  function selectCategory(): void {
+    props.onCategorySelected(item.label)
+  }
+
+  return (
+    <Pressable style={[categoryItemStyle.item, { backgroundColor: item.color}]} onPress={() => selectCategory()} >
+      <Text style={categoryItemStyle.text}>{item.label}</Text>
+    </Pressable>
+  );
+}
+
+const categoryItemStyle = StyleSheet.create({
+  text: {
+    color: "#fff",
+    fontSize: 15,
+    fontWeight: "bold"
+  },
+  item: {
+    backgroundColor: "#525174",
+    color: "#fff",
+    // borderColor: "#525174",
+    // borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+    margin: 1
+  }
+});
+
 
 export function ItemEdition(props) {
   const item: Transaction = props.item;
@@ -14,11 +48,17 @@ export function ItemEdition(props) {
 
   const dispatch = useDispatch();
 
+  const categories = useSelector( state => state.categories);
+  
+  
+  const [newCategory, setNewCategory] = useState("Nouvelle catégorie");
+
   const [amountStr, setAmountStr] = useState(item.amount.toString());
   const [startDate, setStartDate] = useState(new Date(item.date));
-  // const [category, setCategory] = useState(item.category);
+  const [category, setCategory] = useState(item.category);
   const [label, setLabel] = useState(item.label);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [confimationModalVisible, setConfimationModalVisible] = useState(false);
+  const [categoryModalVisible, setCategoryModalVisible] = useState(false);
   const [saveDisabled, setSaveDisabled] = useState(true);
 
   const navigation = useNavigation();
@@ -30,7 +70,7 @@ export function ItemEdition(props) {
       setSaveDisabled(true);
     }
 
-  });
+  }, [amountStr, label]);
 
 
   function saveItem() {
@@ -39,9 +79,9 @@ export function ItemEdition(props) {
       const date = item.isReccuring ? undefined : startDate? new Date(startDate) : new Date();
       console.log(date)
       if(item.transaction_id) {
-        dispatch(updateTransaction(item, label, amount, date));
+        dispatch(updateTransaction(item, label, amount, category, date));
       } else {
-        dispatch(addTransaction(label, amount, "OTHER", date, item.isReccuring));
+        dispatch(addTransaction(label, amount, category, date, item.isReccuring));
       }
       back();
     }
@@ -99,15 +139,31 @@ export function ItemEdition(props) {
 
 
   function openConfirmModal() {
-    setModalVisible(true);
+    setConfimationModalVisible(true);
   }
 
 
   function deleteTransaction() {
-    setModalVisible(false);
+    setConfimationModalVisible(false);
     dispatch(removeTransaction(item));
     back();
   }
+
+  function showCategoriesModal(): void {
+    setCategoryModalVisible(true);
+  }
+  
+  function selectCategory(newCat: string): void {
+    setCategory(newCat);
+    setCategoryModalVisible(false);
+  }
+
+  function saveNewCategory(newCat: string): void {
+    dispatch(addCategory(newCat));
+    selectCategory(newCat);
+  }
+
+  
 
   return (
     <View style={{ paddingTop: 20 }}  >
@@ -121,22 +177,29 @@ export function ItemEdition(props) {
 
       <TextInput selectTextOnFocus autoFocus style={itemStyle.container} value={label} onChangeText={(label) => { setLabel(label) }} />
       <Text style={itemStyle.header}>Montant</Text>
-      <TextInput selectTextOnFocus keyboardType={'numeric'} style={itemStyle.container} value={amountStr}
+      <TextInput selectTextOnFocus keyboardType={'numeric'} 
+        style={[itemStyle.container]} 
+        value={amountStr}
         onChangeText={(amount) => { setAmountStr(amount) }}
         onBlur={() => validateAmountNumber()}
       />
       {/* <Text style={itemStyle.header}>Catégorie</Text>
       <TextInput selectTextOnFocus style={itemStyle.container} value={category} onChangeText={(category) => { setCategory(category) }} /> */}
 
-
       { !item.isReccuring &&
         <>
           <Text style={itemStyle.header}>Date</Text>
           <Pressable onPress={() => showDatePicker()} style={itemStyle.container}>
-            <Text style={{ color: "#525174", fontSize: 15 }}>{date.AsString(startDate)}</Text>
+            <Text style={[{ color: "#525174", fontSize: 15 }]}>{date.AsString(startDate)}</Text>
           </Pressable>
         </>
       }
+      <>
+        <Text style={itemStyle.header}>Catégorie</Text>
+        <Pressable onPress={() => showCategoriesModal()} style={itemStyle.container}>
+          <Text style={{ color: "#525174", fontSize: 15 }}>{ category }</Text>
+        </Pressable>
+      </>
 
 
       <View style={{ paddingTop: 20, flexDirection: "row", justifyContent: "space-around" }}  >
@@ -148,16 +211,16 @@ export function ItemEdition(props) {
         <Modal
           animationType="slide"
           transparent={true}
-          visible={modalVisible}
+          visible={confimationModalVisible}
           onRequestClose={() => {
             Alert.alert('Modal has been closed.');
-            setModalVisible(!modalVisible);
+            setConfimationModalVisible(!confimationModalVisible);
           }}>
           <View style={modalStyles.centeredView}>
             <View style={modalStyles.modalView}>
               <Text style={modalStyles.modalText}>Supprimer cette transaction ?</Text>
               <View style={ {flexDirection: "row", justifyContent: "space-between"}}>
-                <Button onPress={() => setModalVisible(false)} title="Non" color="#ff0054" />
+                <Button onPress={() => setConfimationModalVisible(false)} title="Non" color="#ff0054" />
                 <Button onPress={deleteTransaction} title="Oui" color="#2ec4b6" />
               </View>
             </View>
@@ -165,16 +228,38 @@ export function ItemEdition(props) {
         </Modal>
       </View>
 
-      {/* <View style={checkBoxStyles.section}>
-            <Checkbox style={checkBoxStyles.checkbox} value={isLimited} onValueChange={setIsLimited} />
-            <Pressable onPress={() => setIsLimited(!isLimited) }>
-                <Text style={checkBoxStyles.paragraph}>Limité dans le temps ?</Text>
-            </Pressable>
-        </View> */}
 
-      {/* <Pressable onPress={() => showStartDatePicker() } style={ itemStyle.container }>
-            <Text style={ { color: "#525174", fontSize: 15 } } >{date.AsString(item.startDate)}</Text>
-        </Pressable> */}
+      <View style={modalStyles.centeredView}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={categoryModalVisible}>
+          <View style={modalStyles.centeredView}>
+            <View style={modalStyles.modalView}>
+              
+              <View style={{ flex: 1}}>
+                <Text>Choisissez une catégorie existante</Text>
+                <FlatList 
+                    data={categories}
+                    renderItem={({item}) => <CategoryItem item={item} onCategorySelected={(category: string) => selectCategory(category)} ></CategoryItem>}
+                />
+              </View>
+              <View style={{ marginBottom: 30}}>
+                <Text>Ou entrez une nouvelle catégorie</Text>
+                <TextInput selectTextOnFocus
+                  style={[categoryItemStyle.item]} 
+                  value={newCategory}
+                  onChangeText={(label) => { setNewCategory(label) }}
+                />
+              </View>
+              <View style={ {flexDirection: "row", justifyContent: "space-between"}}>
+                <Button onPress={() => setCategoryModalVisible(false)} title="Annuler" color="#ff0054" />
+                <Button onPress={() => saveNewCategory(newCategory)} title="Valider" color="#2ec4b6" />
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </View>
 
     </View>
   );
@@ -201,10 +286,10 @@ const itemStyle = StyleSheet.create({
     borderWidth: 1,
     padding: 8,
     margin: 8,
+    height: 40
   },
   header: {
     color: "#fff",
-    margin: 4,
     marginLeft: 10,
     fontSize: 17,
     fontWeight: "bold"

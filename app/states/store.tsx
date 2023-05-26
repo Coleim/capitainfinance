@@ -21,7 +21,7 @@ const store = configureStore({
 
 
 const persistor = persistStore(store);
-// console.log("   --- store.getState() --- " , store.getState())
+console.log("   --- store.getState() --- " , store.getState())
 
 export { store, persistor };
 

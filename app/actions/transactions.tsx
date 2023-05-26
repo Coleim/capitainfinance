@@ -15,11 +15,12 @@ export interface TransactionAction {
 };
 
 
-export const updateTransaction = (transaction: Transaction, label: string, amount: number, date: Date | undefined) => ({ 
+export const updateTransaction = (transaction: Transaction, label: string, amount: number, category: string, date: Date | undefined) => ({ 
     type: transaction.isReccuring ? UPDATE_RECURRING_TRANSACTION : UPDATE_TRANSACTION, 
     transaction: {
         ...transaction,
         label,
+        category,
         amount,
         date
     } });

@@ -6,10 +6,27 @@ import { Transaction } from "../models/transaction";
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 export function LatestTransactions() {
-  const dailyTransactions = useSelector( state => state.transactions.currentMonthDailyTransactions );
+  console.log("---------------------------------")
+  const dailyTransactions = useSelector( state => state.transactions.currentMonthDailyTransactions);
+  console.log("DT: " , "dailyTransactions")
+  console.log("DT: " , dailyTransactions)
 
   function viewStats(): void {
   }
+
+  function sortTransactions(a: Transaction, b: Transaction): number {
+    if(!a.date || !b.date) {
+      return 0;
+    }
+    if(new Date(a.date) < new Date(b.date) ) {
+      return 1;
+    }
+    if(new Date(a.date) > new Date(b.date) ) {
+      return -1;
+    }
+    return 0;    
+  }
+  
 
   return (
     <View style={ styles.content }>
@@ -19,7 +36,7 @@ export function LatestTransactions() {
           <Ionicons name="md-stats-chart" size={15} color="#fff" style={{zIndex: 3, height: 15, marginBottom: 5, alignSelf: "baseline" }} />
         </Pressable >
         <FlatList 
-            data={dailyTransactions.sort( (a: Transaction, b: Transaction) => a.date && b.date && new Date(a.date) < new Date(b.date) )}
+            data={dailyTransactions.sort(sortTransactions) }
             renderItem={({item}) => <DailyTransactionItem item={item}></DailyTransactionItem>}
         />
       </SafeAreaView>

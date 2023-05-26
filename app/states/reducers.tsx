@@ -5,6 +5,7 @@ import { INSERT_SAVING } from '../actions/savings';
 import { Transaction } from '../models/transaction';
 import { date } from '../services/DateAsString';
 import { RESET_STORE, SET_TODAY } from '../actions/global';
+import { ADD_CATEGORY } from '../actions/categories';
 
 // https://stackoverflow.com/questions/72748846/modify-android-gradle-properties-in-expo-managed-app
 
@@ -23,19 +24,32 @@ const initialStateRecurringTransactions = {
     realAvailableAmountPerDay: [], // Montant disponible réel, chaque jour, jusqu'au jour courant : availableMonthlyAmount - sum(spentPerDay[i] , i < jour)
 }
 
+
 const getRealAvailableAmountPerDay = (availableMonthlyAmount: number, spentPerDay: number[], today: Date | undefined) : number[] => {
+    console.log("> getRealAvailableAmountPerDay ", availableMonthlyAmount)
+    console.log("> spentPerDay ", spentPerDay)
+    console.log("> today ", today)
+    console.log("> getRealAvailableAmountPerDay")
     let realAvailableAmountPerDay = [];
     let stackedAvailableAmountPerDay = Number(availableMonthlyAmount);
+    console.log("> stackedAvailableAmountPerDay: " , stackedAvailableAmountPerDay)
     if(today) {
-        for (let i = 0; i < today.getDate(); ++i) {
+        console.log("> today: ")
+        const todayDate = new Date(today);
+        for (let i = 0; i < todayDate.getDate(); ++i) {
+            console.log("> 1")
             if(spentPerDay.length > i ) {
                 stackedAvailableAmountPerDay = Number(stackedAvailableAmountPerDay) + Number(spentPerDay[i]);
                 realAvailableAmountPerDay.push(stackedAvailableAmountPerDay);
             } else {
                 realAvailableAmountPerDay.push(stackedAvailableAmountPerDay);
             }
+            console.log("> 2")
         }
+        console.log("> bite: ")
     }
+
+    console.log("> realAvailableAmountPerDay: " , realAvailableAmountPerDay)
     return realAvailableAmountPerDay;
 }
 
@@ -70,13 +84,18 @@ function calculateSpendPerDay(today: Date, currentMonthTransactions: Transaction
 
 
 const transactions = (state = initialStateRecurringTransactions, action: any) => {
+    console.log("TRANSAC: " , action)
+    console.log("TRANSAC STATE: " , state)
+    console.log(state)
     if(action.type !== SET_TODAY && !state.today) {
         return state;
     }
-    const today: Date = action.today ?? state.today;
+    const today: Date = new Date(action.today ?? state.today);
+    console.log("TODAY: ", today)
     const numberOfDaysInMonth = date.GetNumberOfDaysInCurrentMonth(today);
     let spentPerDay = [];
     
+    console.log("WHAT ?? ")
     switch (action.type) {
         case SET_TODAY:
             const currentMonthTransactions = state.currentMonthDailyTransactions.filter((transaction) => { 
@@ -232,10 +251,24 @@ const transactions = (state = initialStateRecurringTransactions, action: any) =>
         default:
             return initialStateRecurringTransactions;
     }
-}
+};
+
+const categories = (state = [], action: any) => {
+    console.log("CAT STATE: " , state)
+    switch (action.type) {
+        case ADD_CATEGORY:
+            console.log("ADD_CATEGORY");
+            console.log(action);
+            console.log(state);
+            return [...state, action.category];
+        default:
+            return state;
+    }
+};
 
 const reducers = combineReducers({
-    transactions
+    transactions,
+    categories
 });
 
 export default reducers;

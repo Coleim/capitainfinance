@@ -10,7 +10,7 @@ export function EditTransactionItemPage( { route } ) {
     const item: Transaction = route.params.item ?? {
         label: "",
         amount: 0,
-        category: "",
+        category: "Autre",
         date: recurring ? undefined : new Date(),
         isReccuring: recurring
     };

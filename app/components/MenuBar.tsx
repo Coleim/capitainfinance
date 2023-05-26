@@ -41,14 +41,13 @@ export function MenuBar(props) {
         }
       </View>
 
-      <View style={{ flex: 1, flexDirection: "row", marginLeft: "auto", marginBottom: -20 }}>
+      <View style={{ flex: 1.25, flexDirection: "row", marginBottom: -20 }}>
         <Ionicons name="md-add-circle" size={70} style={{zIndex: 3, bottom: 25 }} color="#1ee9a4" onPress={ () => addIncome() } />
         <Ionicons name="md-remove-circle" size={70} color="#e91e63" style={{zIndex: 3, bottom: 25 }} onPress={ () => addExpense() } />
       </View>
 
       <View style={{ flex: 1 }}>
         { !isRecurring &&
-
           <Pressable style={ { marginLeft: "auto", flexDirection: "column", justifyContent: "center", alignItems: "center", alignContent: "center" }} onPress={ () => openRecurringConfigurationPage() }>
               <Ionicons name="md-sync-circle-outline" size={15} color="#fff" style={{zIndex: 3, height: 15, marginBottom: 5 }} />
               <Text style={ { color: "#fff", marginRight: 5, fontSize: 10} }>Transactions</Text>

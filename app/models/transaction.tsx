@@ -4,7 +4,7 @@ export interface Transaction {
     owner_id: string;
     label: string;
     amount: number;
-    category?: string;
+    category: string;
     date?: Date;
     endDate?: Date;
     month?: number;

@@ -8,6 +8,7 @@ export namespace date {
         console.log("GetNumberOfDaysInCurrentMonth")
         console.log(today)
         const numberOfDays = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+        console.log(numberOfDays)
         return numberOfDays;
     }
     
