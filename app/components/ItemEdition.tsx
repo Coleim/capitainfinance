@@ -6,20 +6,25 @@ import { Transaction } from "../models/transaction";
 import { useDispatch, useSelector } from "react-redux";
 import { addTransaction, removeTransaction, updateTransaction } from "../actions/transactions";
 import { date } from "../services/DateAsString";
-import { addCategory } from "../actions/categories";
+import { addCategory, removeCategory } from "../actions/categories";
 import { Category } from "../models/Category";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 
 function CategoryItem(props) {
   const item: Category = props.item;
 
   function selectCategory(): void {
-    props.onCategorySelected(item.label)
+    props.onCategorySelected(item.label);
+  }
+  function removeItem(): void {
+    props.onCategoryRemoved(item.label)
   }
 
   return (
-    <Pressable style={[categoryItemStyle.item, { backgroundColor: item.color}]} onPress={() => selectCategory()} >
+    <Pressable style={[categoryItemStyle.item, { backgroundColor: item.color, flexDirection: "row"}]} onPress={() => selectCategory()} >
       <Text style={categoryItemStyle.text}>{item.label}</Text>
+      <Ionicons name="md-trash-bin" size={20} color="#ff0054" style={{zIndex: 3, height: 20, marginLeft: "auto", alignSelf: "baseline" }} onPress={ () => removeItem()} />
     </Pressable>
   );
 }
@@ -33,8 +38,6 @@ const categoryItemStyle = StyleSheet.create({
   item: {
     backgroundColor: "#525174",
     color: "#fff",
-    // borderColor: "#525174",
-    // borderWidth: 1,
     borderRadius: 10,
     padding: 10,
     margin: 1
@@ -153,17 +156,15 @@ export function ItemEdition(props) {
     setCategoryModalVisible(true);
   }
   
-  function selectCategory(newCat: string): void {
-    setCategory(newCat);
+  function selectCategory(category: string): void {
+    setCategory(category);
     setCategoryModalVisible(false);
   }
 
-  function saveNewCategory(newCat: string): void {
-    dispatch(addCategory(newCat));
-    selectCategory(newCat);
+  function saveNewCategory(category: string): void {
+    dispatch(addCategory(category));
+    selectCategory(category);
   }
-
-  
 
   return (
     <View style={{ paddingTop: 20 }}  >
@@ -241,7 +242,7 @@ export function ItemEdition(props) {
                 <Text>Choisissez une catégorie existante</Text>
                 <FlatList 
                     data={categories}
-                    renderItem={({item}) => <CategoryItem item={item} onCategorySelected={(category: string) => selectCategory(category)} ></CategoryItem>}
+                    renderItem={({item}) => <CategoryItem item={item} onCategorySelected={(category: string) => selectCategory(category)} onCategoryRemoved={(category: string) => dispatch(removeCategory(category)) }></CategoryItem>}
                 />
               </View>
               <View style={{ marginBottom: 30}}>
@@ -264,20 +265,6 @@ export function ItemEdition(props) {
     </View>
   );
 }
-
-const checkBoxStyles = StyleSheet.create({
-  section: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  paragraph: {
-    fontSize: 15,
-    color: "#fff"
-  },
-  checkbox: {
-    margin: 10,
-  },
-});
 
 const itemStyle = StyleSheet.create({
   container: {

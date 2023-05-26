@@ -1,6 +1,7 @@
 import { Category } from "../models/Category";
 
 export const ADD_CATEGORY = 'ADD_CATEGORY';
+export const REMOVE_CATEGORY = 'REMOVE_CATEGORY';
 
 export interface CategoryAction {
     type: string;
@@ -21,3 +22,5 @@ const colors = [
 ];
 
 export const addCategory = (label: String) => ({ type: ADD_CATEGORY, category: { label, color: colors[Math.floor(Math.random() * 10)]} });
+export const removeCategory = (label: String) => ({ type: REMOVE_CATEGORY, category: { label, color: colors[Math.floor(Math.random() * 10)]} });
+

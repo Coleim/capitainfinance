@@ -5,7 +5,7 @@ import { INSERT_SAVING } from '../actions/savings';
 import { Transaction } from '../models/transaction';
 import { date } from '../services/DateAsString';
 import { RESET_STORE, SET_TODAY } from '../actions/global';
-import { ADD_CATEGORY } from '../actions/categories';
+import { ADD_CATEGORY, REMOVE_CATEGORY } from '../actions/categories';
 
 // https://stackoverflow.com/questions/72748846/modify-android-gradle-properties-in-expo-managed-app
 
@@ -254,13 +254,15 @@ const transactions = (state = initialStateRecurringTransactions, action: any) =>
 };
 
 const categories = (state = [], action: any) => {
-    console.log("CAT STATE: " , state)
     switch (action.type) {
         case ADD_CATEGORY:
-            console.log("ADD_CATEGORY");
-            console.log(action);
-            console.log(state);
+            const found = state.find(category => category.label === action.category.label);
+            if(found) {
+                return state;
+            }
             return [...state, action.category];
+        case REMOVE_CATEGORY:
+            return [...state.filter( category => category.label !== action.category.label )];
         default:
             return state;
     }
