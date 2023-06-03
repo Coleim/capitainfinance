@@ -62,5 +62,11 @@ export namespace date {
         const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
         return AsDatabaseString(lastDay);
     }
+
+    export const GetMonthKey = (date: Date) => {
+        const month = Number(date.getMonth()+1).toString().padStart(2, '0');
+        const dateKey = date.getFullYear() + '_' + month;
+        return dateKey;
+    }
     
 }

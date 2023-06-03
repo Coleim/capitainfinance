@@ -1,20 +1,20 @@
 import { combineReducers } from 'redux';
 import { ADD_RECURRING_TRANSACTION, ADD_TRANSACTION, REMOVE_RECURRING_TRANSACTION, REMOVE_TRANSACTION, UPDATE_RECURRING_TRANSACTION, UPDATE_TRANSACTION } from "../actions/transactions";
-import * as Crypto from 'expo-crypto';
-import { INSERT_SAVING } from '../actions/savings';
 import { Transaction } from '../models/transaction';
 import { date } from '../services/DateAsString';
 import { RESET_STORE, SET_TODAY } from '../actions/global';
 import { ADD_CATEGORY, REMOVE_CATEGORY } from '../actions/categories';
+import { INSERT_SAVING } from '../actions/savings';
 
 // https://stackoverflow.com/questions/72748846/modify-android-gradle-properties-in-expo-managed-app
+
+
 
 const today = new Date();
 const initialStateRecurringTransactions = {
     today: undefined,
     recurringTransactions: [],
-    currentMonthDailyTransactions: [{ amount: -10, category: "TEST", date: new Date(today.getFullYear(), today.getMonth()-1, 25), isReccuring: false, label: "Test VIEUX", owner_id: "123", transaction_id: "0b9b2727-10b4-40bc-a435-6e73f5007131"}],
-    pastDailyTransactions: [],
+    currentMonthDailyTransactions: [],
     totalExpenses: 0,
     totalIncomes: 0,
     availableMonthlyAmount: 0, // Montant disponible pour le mois
@@ -22,34 +22,24 @@ const initialStateRecurringTransactions = {
     spentPerDay: [], // Montant dépensé chaque jour, ce mois.
     theoriticalAvailableAmountPerDay: [], // Montant disponible théorique, chaque jour : availableMonthlyAmount - availableDailyAmount x jour
     realAvailableAmountPerDay: [], // Montant disponible réel, chaque jour, jusqu'au jour courant : availableMonthlyAmount - sum(spentPerDay[i] , i < jour)
+    allTransactionPerMonth: {}
 }
 
 
 const getRealAvailableAmountPerDay = (availableMonthlyAmount: number, spentPerDay: number[], today: Date | undefined) : number[] => {
-    console.log("> getRealAvailableAmountPerDay ", availableMonthlyAmount)
-    console.log("> spentPerDay ", spentPerDay)
-    console.log("> today ", today)
-    console.log("> getRealAvailableAmountPerDay")
     let realAvailableAmountPerDay = [];
     let stackedAvailableAmountPerDay = Number(availableMonthlyAmount);
-    console.log("> stackedAvailableAmountPerDay: " , stackedAvailableAmountPerDay)
     if(today) {
-        console.log("> today: ")
         const todayDate = new Date(today);
         for (let i = 0; i < todayDate.getDate(); ++i) {
-            console.log("> 1")
             if(spentPerDay.length > i ) {
                 stackedAvailableAmountPerDay = Number(stackedAvailableAmountPerDay) + Number(spentPerDay[i]);
                 realAvailableAmountPerDay.push(stackedAvailableAmountPerDay);
             } else {
                 realAvailableAmountPerDay.push(stackedAvailableAmountPerDay);
             }
-            console.log("> 2")
         }
-        console.log("> bite: ")
     }
-
-    console.log("> realAvailableAmountPerDay: " , realAvailableAmountPerDay)
     return realAvailableAmountPerDay;
 }
 
@@ -84,31 +74,69 @@ function calculateSpendPerDay(today: Date, currentMonthTransactions: Transaction
 
 
 const transactions = (state = initialStateRecurringTransactions, action: any) => {
-    console.log("TRANSAC: " , action)
-    console.log("TRANSAC STATE: " , state)
-    console.log(state)
     if(action.type !== SET_TODAY && !state.today) {
         return state;
     }
     const today: Date = new Date(action.today ?? state.today);
-    console.log("TODAY: ", today)
     const numberOfDaysInMonth = date.GetNumberOfDaysInCurrentMonth(today);
     let spentPerDay = [];
     
-    console.log("WHAT ?? ")
     switch (action.type) {
         case SET_TODAY:
+            console.log("================================ SET_TODAY ?? ")
+
             const currentMonthTransactions = state.currentMonthDailyTransactions.filter((transaction) => { 
                 const d = new Date(transaction.date);
                 return d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
             });
             const pastTransactions = state.currentMonthDailyTransactions.filter((transaction) => {
                 const d = new Date(transaction.date);
-                d.getMonth() !== today.getMonth() || d.getFullYear() !== today.getFullYear();
+                return d.getMonth() !== today.getMonth() || d.getFullYear() !== today.getFullYear();
             });
+
+            const dateKey = date.GetMonthKey(today);
+            let allTransactionPerMonth: { [id: string]: any } = state.allTransactionPerMonth;
+            if(!allTransactionPerMonth[dateKey]) {
+                allTransactionPerMonth[dateKey] = {
+                    dailyTransactions: currentMonthTransactions
+                };
+            }
+            pastTransactions.forEach( transaction => {
+                const trxDate = new Date(transaction.date);
+                const trxDateKey = date.GetMonthKey(trxDate);
+                if(allTransactionPerMonth[trxDateKey]) {
+                    const found = allTransactionPerMonth[trxDateKey].dailyTransactions.find(element => element.transaction_id === transaction.transaction_id);
+                    if(!found) {
+                        allTransactionPerMonth[trxDateKey].dailyTransactions.push(transaction);
+                    }
+                } else {
+                    allTransactionPerMonth[trxDateKey] = {
+                        dailyTransactions: [transaction]
+                    };
+                }
+
+            })
+            let lastMonth = new Date(today);
+            lastMonth.setDate(1);
+            lastMonth.setMonth(lastMonth.getMonth()-1);
+            let lastMonthKey = date.GetMonthKey(lastMonth);
+            while(allTransactionPerMonth[lastMonthKey]) {
+                if(!allTransactionPerMonth[lastMonthKey].recurringTransactions) {
+                    allTransactionPerMonth[lastMonthKey] = {
+                        ...allTransactionPerMonth[lastMonthKey],
+                        recurringTransactions: state.recurringTransactions
+                    };
+                }
+                lastMonth.setMonth(lastMonth.getMonth()-1);
+                lastMonthKey = date.GetMonthKey(lastMonth);
+            }
+            
+            console.log("allTransactionPerMonth: " , allTransactionPerMonth)
+
             spentPerDay = calculateSpendPerDay(today, currentMonthTransactions);
             return {
                 ...state,
+                allTransactionPerMonth,
                 today: action.today,
                 currentMonthDailyTransactions: currentMonthTransactions,
                 pastDailyTransactions: pastTransactions,
@@ -268,9 +296,22 @@ const categories = (state = [], action: any) => {
     }
 };
 
+const savings = (state = {}, action: any) => {
+    switch (action.type) {
+        case INSERT_SAVING:
+            let allSavings = { ...state };
+            const newSaving = action.saving;
+            allSavings[newSaving.key] = newSaving;
+            return allSavings;
+        default:
+            return state;
+    }
+};
+
 const reducers = combineReducers({
     transactions,
-    categories
+    categories,
+    savings
 });
 
 export default reducers;

@@ -108,7 +108,7 @@ export function ItemEdition(props) {
   };
 
   const showDatePicker = () => {
-    console.log(Platform.OS)
+    validateAmountNumber();
     const today = new Date();
     if(Platform.OS === 'android') {
       DateTimePickerAndroid.open({
@@ -153,6 +153,7 @@ export function ItemEdition(props) {
   }
 
   function showCategoriesModal(): void {
+    validateAmountNumber();
     setCategoryModalVisible(true);
   }
   

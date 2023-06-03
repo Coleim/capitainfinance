@@ -1,7 +1,7 @@
 
 export interface Saving {
     saving_id: number;
-    month: number;
-    year: number;
+    key: string;
+    savingDate: Date;
     amount: number;
 };

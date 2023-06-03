@@ -35,13 +35,15 @@ export function MenuBar(props) {
           <Ionicons name="md-arrow-back" size={32} color="#fff" onPress={ () => goHome() } />
           :
           <Pressable style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", marginRight: "auto" }} onPress={() => openConfiguration()}>
-            <Ionicons name="md-settings" size={15} color="#fff" style={{ zIndex: 4, height: 15, marginBottom: 5 }} />
-            <Text style={{ color: "#fff", marginRight: 5, fontSize: 10, alignSelf: "baseline" }}>Configuration</Text>
+            {/* <Ionicons name="md-settings" size={15} color="#fff" style={{ zIndex: 4, height: 15, marginBottom: 5 }} />
+            <Text style={{ color: "#fff", marginRight: 5, fontSize: 10, alignSelf: "baseline" }}>Configuration</Text> */}
+            <Ionicons name="md-settings" size={15} color="#303030" style={{ zIndex: 4, height: 15, marginBottom: 5 }} />
+            <Text style={{ color: "#303030", marginRight: 5, fontSize: 10, alignSelf: "baseline" }}>Configuration</Text>
           </Pressable >
         }
       </View>
 
-      <View style={{ flex: 1.25, flexDirection: "row", marginBottom: -20 }}>
+      <View style={{ flexDirection: "row", marginLeft: "auto", marginRight: "auto", marginBottom: -20 }}>
         <Ionicons name="md-add-circle" size={70} style={{zIndex: 3, bottom: 25 }} color="#1ee9a4" onPress={ () => addIncome() } />
         <Ionicons name="md-remove-circle" size={70} color="#e91e63" style={{zIndex: 3, bottom: 25 }} onPress={ () => addExpense() } />
       </View>
