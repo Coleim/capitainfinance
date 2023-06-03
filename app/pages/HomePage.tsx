@@ -78,30 +78,27 @@ export const HomePage = ({ navigation }) => {
     return (
         <SafeAreaView style={[styles.content]}>
             <View style={{ flex: 1 }}>
-                <TransactionsContainer navigation={navigation}></TransactionsContainer>
-            </View>
-
-            <View style={modalStyles.centeredView}>
-                <Modal
-                animationType="slide"
-                transparent={true}
-                visible={savingsModalVisible}
-                onRequestClose={() => { setSavingsModalVisible(!savingsModalVisible); }}>
-                <View style={modalStyles.centeredView}>
-                    <View style={modalStyles.modalView}>
-                    { currentSaving >= 0 ? 
-                        <>
-                        <Text style={modalStyles.modalHeader}>Félcitation !</Text>
-                        <Text style={modalStyles.modalText}> En {date.GetMonthAsString(lastMonth)}, vous avez pu mettre de coté {currentSaving} € </Text></>
-                        :
-                        <><Text style={modalStyles.modalHeader}>Attention !</Text>
-                        <Text style={modalStyles.modalText}>Pour le mois de {date.GetMonthAsString(lastMonth)}, vous êtes en déficit de {currentSaving} € </Text></>
-                    }
-                    <View style={ {flexDirection: "row", justifyContent: "center"}}>
-                        <Button onPress={ onUserCloseSavingModal } title="Fermer" color="#2ec4b6" />
-                    </View>
-                    </View>
-                </View>
+              <TransactionsContainer navigation={navigation}></TransactionsContainer>
+              <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={savingsModalVisible}
+                  onRequestClose={() => { setSavingsModalVisible(!savingsModalVisible); }}>
+                  <View style={modalStyles.centeredView}>
+                      <View style={modalStyles.modalView}>
+                      { currentSaving >= 0 ? 
+                          <>
+                          <Text style={modalStyles.modalHeader}>Félcitation !</Text>
+                          <Text style={modalStyles.modalText}> En {date.GetMonthAsString(lastMonth)}, vous avez pu mettre de coté {currentSaving} € </Text></>
+                          :
+                          <><Text style={modalStyles.modalHeader}>Attention !</Text>
+                          <Text style={modalStyles.modalText}>Pour le mois de {date.GetMonthAsString(lastMonth)}, vous êtes en déficit de {currentSaving} € </Text></>
+                      }
+                      <View style={ {flexDirection: "row", justifyContent: "center"}}>
+                          <Button onPress={ onUserCloseSavingModal } title="Fermer" color="#2ec4b6" />
+                      </View>
+                      </View>
+                  </View>
                 </Modal>
             </View>
         </SafeAreaView>
