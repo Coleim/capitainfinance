@@ -4,14 +4,15 @@ import { DailyTransactionItem } from "./DailyTransactionItem";
 import { useSelector } from "react-redux";
 import { Transaction } from "../models/transaction";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useNavigation } from "@react-navigation/native";
 
 export function LatestTransactions() {
-  console.log("---------------------------------")
+  const navigation = useNavigation();
+  
   const dailyTransactions = useSelector( state => state.transactions.currentMonthDailyTransactions);
-  console.log("DT: " , "dailyTransactions")
-  console.log("DT: " , dailyTransactions)
 
   function viewStats(): void {
+    navigation.navigate('StatisticsPage');
   }
 
   function sortTransactions(a: Transaction, b: Transaction): number {

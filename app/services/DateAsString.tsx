@@ -68,5 +68,13 @@ export namespace date {
         const dateKey = date.getFullYear() + '_' + month;
         return dateKey;
     }
+
+    export const GetKeyDisplay = (key: string) => {
+        const arr = key.split("_");
+        
+        const month = Number(arr[1]);
+        const year = arr[0];
+        return monthNames[(month-1)] + " " + year;
+    }
     
 }

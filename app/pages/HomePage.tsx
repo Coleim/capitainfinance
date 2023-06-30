@@ -19,8 +19,6 @@ export const HomePage = ({ navigation }) => {
     const [lastMonth, setLastMonth] = useState(new Date());
 
     const computeSaving = (recTrans: [], dailyTrans: []) => {
-        console.log("recTrans: " , recTrans)
-        console.log("dailyTrans: " , dailyTrans)
         const totalRecurring = recTrans.reduce((acc, transaction) => { return acc + transaction.amount; }, 0);
         const totalDaily = dailyTrans.reduce((acc, transaction) => { return acc + transaction.amount; }, 0);
         return totalRecurring + totalDaily;
@@ -33,14 +31,11 @@ export const HomePage = ({ navigation }) => {
     }, [recurringTransactions]);
 
     useEffect(() => {
-        console.log("savings: " , savings);
         let lastMonth = new Date();
         lastMonth.setDate(1);
         lastMonth.setMonth(lastMonth.getMonth()-1);
         const lastMonthKey = date.GetMonthKey(lastMonth);
         setLastMonth(lastMonth);
-        console.log("monthKey: " , lastMonthKey);
-        console.log("allTransactionPerMonth: " , allTransactionPerMonth[lastMonthKey]);
         if(!savings[lastMonthKey] && allTransactionPerMonth[lastMonthKey] && 
             allTransactionPerMonth[lastMonthKey].recurringTransactions && allTransactionPerMonth[lastMonthKey].dailyTransactions) {
                 const recTrans = allTransactionPerMonth[lastMonthKey].recurringTransactions;

@@ -13,6 +13,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from './app/states/store';
 import { styles } from './styles';
+import { StatisticsPage } from './app/pages/StatisticsPage';
 
 
 const Loading = () => {
@@ -46,6 +47,7 @@ const App = () => {
             <NavigationContainer>
               <Stack.Navigator screenOptions={{headerShown: false}}>
                 <Stack.Screen name="HomePage" component={HomePage}/>
+                <Stack.Screen name="StatisticsPage" component={StatisticsPage} />
                 <Stack.Screen name="RecurringConfigurationPage" component={RecurringConfigurationPage} />
                 <Stack.Screen name="EditTransactionItemPage" component={EditTransactionItemPage} />
               </Stack.Navigator>
