@@ -99,7 +99,7 @@ export function RecurringConfigurationPage( {navigation} ) {
                 </Pressable>
             </View> */}
 
-            <MenuBar navigation={navigation} recurring={true}></MenuBar>
+            <MenuBar navigation={navigation} recurring={true} hasBack={true}></MenuBar>
 
         </SafeAreaView>
     );

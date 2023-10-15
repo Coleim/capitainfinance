@@ -53,7 +53,7 @@ export function BurndownChart() {
                 color: (opacity = 1) => `rgba(255, 0, 0, 1)` }
             ]
           }}
-          width={Dimensions.get("window").width - 20} // from react-native
+          width={Math.min(Dimensions.get("window").width - 20, 580)} // from react-native
           yLabelsOffset={5}
           height={220}
           yAxisSuffix="€"

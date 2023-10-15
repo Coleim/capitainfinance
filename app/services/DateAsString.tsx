@@ -5,10 +5,7 @@ export namespace date {
                         "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
 
     export const GetNumberOfDaysInCurrentMonth = (today: Date) => {
-        console.log("GetNumberOfDaysInCurrentMonth")
-        console.log(today)
         const numberOfDays = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-        console.log(numberOfDays)
         return numberOfDays;
     }
     
@@ -16,6 +13,13 @@ export namespace date {
         if(!date) return "";
         return monthNames[date.getMonth()]
     }
+
+    export const GetYearAsString = (date: Date | undefined) => {
+        if(!date) return "";
+        return date.getFullYear()
+    }
+
+    
 
     export const AsString = (date: Date | undefined) => {
         if(!date) return "";
@@ -75,6 +79,12 @@ export namespace date {
         const month = Number(arr[1]);
         const year = arr[0];
         return monthNames[(month-1)] + " " + year;
+    }
+
+    export const GetMonthFromKey = (key: string) => {
+        const arr = key.split("_");
+        const month = Number(arr[1]);
+        return month;
     }
     
 }

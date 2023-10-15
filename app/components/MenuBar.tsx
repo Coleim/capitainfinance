@@ -4,6 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 export function MenuBar(props) {
   
   const isRecurring: boolean = props.recurring;
+  const hasBack: boolean = props.hasBack;
   const { navigation } = props;
   
   function openRecurringConfigurationPage(): void {
@@ -31,15 +32,9 @@ export function MenuBar(props) {
 
     <View style={{ flexDirection: "row", margin: 5, alignItems: "center" }}>
       <View style={{ flex: 1 }}>
-        { isRecurring ?
+        { hasBack ?
           <Ionicons name="md-arrow-back" size={32} color="#fff" onPress={ () => goHome() } />
-          :
-          <Pressable style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", marginRight: "auto" }} onPress={() => openConfiguration()}>
-            {/* <Ionicons name="md-settings" size={15} color="#fff" style={{ zIndex: 4, height: 15, marginBottom: 5 }} />
-            <Text style={{ color: "#fff", marginRight: 5, fontSize: 10, alignSelf: "baseline" }}>Configuration</Text> */}
-            <Ionicons name="md-settings" size={15} color="#303030" style={{ zIndex: 4, height: 15, marginBottom: 5 }} />
-            <Text style={{ color: "#303030", marginRight: 5, fontSize: 10, alignSelf: "baseline" }}>Configuration</Text>
-          </Pressable >
+          : ''
         }
       </View>
 

@@ -41,7 +41,7 @@ const App = () => {
     <Provider store={store}>
       {/* <PersistGate persistor={persistor} loading={null}> */}
         
-        <SafeAreaProvider>
+        <SafeAreaProvider style= {{ maxWidth: 600, justifyContent: "center", marginRight: "auto", marginLeft: "auto" }}>
           <StatusBar style="auto"/>
           { canProceed ?
             <NavigationContainer>

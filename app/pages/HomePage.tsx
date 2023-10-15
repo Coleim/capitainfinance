@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setToday } from "../actions/global";
 import { date } from "../services/DateAsString";
 import { insertSaving } from "../actions/savings";
+import { addTransaction } from "../actions/transactions";
 
 export const HomePage = ({ navigation }) => {
    
@@ -25,12 +26,17 @@ export const HomePage = ({ navigation }) => {
     }
     
     useEffect(() => {
+      navigation.navigate('StatisticsPage');
         if (recurringTransactions.length === 0) {
           navigation.navigate('RecurringConfigurationPage');
         }
     }, [recurringTransactions]);
 
     useEffect(() => {
+        // const today = new Date();
+        // const futureDate = new Date(today.getFullYear(), today.getMonth(), 15)
+        dispatch(setToday(new Date()));
+        // dispatch(setToday(futureDate));
         let lastMonth = new Date();
         lastMonth.setDate(1);
         lastMonth.setMonth(lastMonth.getMonth()-1);
@@ -44,25 +50,18 @@ export const HomePage = ({ navigation }) => {
             setCurrentSaving(saving);
             setSavingsModalVisible(true);
         }
-    }, [allTransactionPerMonth]);
-
-    useEffect(() => {
-        // const today = new Date();
-        // const futureDate = new Date(today.getFullYear(), today.getMonth()+5, 8)
-        dispatch(setToday(new Date()));
         // dispatch(setToday(futureDate));
         // dispatch(resetStore(new Date()));
         // const today = new Date();
         // const pastDate = new Date(today.getFullYear(), today.getMonth(), 8)
         // dispatch(addTransaction('Salaire Clement', 3100, 'SALAIRE', undefined, true));
-        // dispatch(addTransaction('Test RECENT', -10, 'TEST'));
-        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
-        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
-        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
-        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
-        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
-        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
-        // dispatch(addTransaction('Test PAST', 51.5, 'TEST', today));
+        // dispatch(addTransaction('Casino', -23.25, 'TEST', new Date(today.getFullYear(), today.getMonth(), 5)));
+        // dispatch(addTransaction('Livres', -65.02, 'TEST', new Date(today.getFullYear(), today.getMonth(), 10)));
+        // dispatch(addTransaction('Révision Voiture', -150, 'TEST', new Date(today.getFullYear(), today.getMonth(), 10)));
+        // dispatch(addTransaction('Essence', -51.5, 'TEST', new Date(today.getFullYear(), today.getMonth(), 11)));
+        // dispatch(addTransaction('Casino', -51.5, 'TEST', new Date(today.getFullYear(), today.getMonth(), 12)));
+        // dispatch(addTransaction('Amazon', -51.5, 'TEST', new Date(today.getFullYear(), today.getMonth(), 13)));
+        // dispatch(addTransaction('Test PAST', -51.5, 'TEST', new Date(today.getFullYear(), today.getMonth(), 14)));
     }, []);
 
     function onUserCloseSavingModal() {
@@ -72,7 +71,7 @@ export const HomePage = ({ navigation }) => {
 
     return (
         <SafeAreaView style={[styles.content]}>
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1}}>
               <TransactionsContainer navigation={navigation}></TransactionsContainer>
               <Modal
                   animationType="slide"
@@ -84,10 +83,10 @@ export const HomePage = ({ navigation }) => {
                       { currentSaving >= 0 ? 
                           <>
                           <Text style={modalStyles.modalHeader}>Félcitation !</Text>
-                          <Text style={modalStyles.modalText}> En {date.GetMonthAsString(lastMonth)}, vous avez pu mettre de coté {currentSaving} € </Text></>
+                          <Text style={modalStyles.modalText}> En {date.GetMonthAsString(lastMonth)}, vous avez pu mettre de coté {currentSaving.toFixed(2)} € </Text></>
                           :
                           <><Text style={modalStyles.modalHeader}>Attention !</Text>
-                          <Text style={modalStyles.modalText}>Pour le mois de {date.GetMonthAsString(lastMonth)}, vous êtes en déficit de {currentSaving} € </Text></>
+                          <Text style={modalStyles.modalText}>Pour le mois de {date.GetMonthAsString(lastMonth)}, vous êtes en déficit de {currentSaving.toFixed(2)} € </Text></>
                       }
                       <View style={ {flexDirection: "row", justifyContent: "center"}}>
                           <Button onPress={ onUserCloseSavingModal } title="Fermer" color="#2ec4b6" />

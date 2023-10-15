@@ -171,24 +171,22 @@ export function ItemEdition(props) {
     <View style={{ paddingTop: 20 }}  >
 
       <View style={{ flexDirection: "row" }}>
-        {isExpense ? <Text style={itemStyle.header}>Nom de la dépense</Text> : <Text style={itemStyle.header}>Nom du revenu</Text>}
+      <Text style={itemStyle.header}>Montant</Text>
         {item.transaction_id && <Pressable style={{ marginLeft: "auto", marginRight: 10 }} onPress={() => openConfirmModal()} >
           <Text style={{ color: "#ff0054" }}>Supprimer</Text>
         </Pressable>}
       </View>
-
-      <TextInput selectTextOnFocus autoFocus style={itemStyle.container} value={label} onChangeText={(label) => { setLabel(label) }} />
-      <Text style={itemStyle.header}>Montant</Text>
-      <TextInput selectTextOnFocus keyboardType={'numeric'} 
+      <TextInput autoFocus selectTextOnFocus keyboardType={'numeric'} 
         style={[itemStyle.container]} 
         value={amountStr}
         onChangeText={(amount) => { setAmountStr(amount) }}
         onBlur={() => validateAmountNumber()}
       />
-      {/* <Text style={itemStyle.header}>Catégorie</Text>
-      <TextInput selectTextOnFocus style={itemStyle.container} value={category} onChangeText={(category) => { setCategory(category) }} /> */}
+      
+      {isExpense ? <Text style={itemStyle.header}>Nom de la dépense</Text> : <Text style={itemStyle.header}>Nom du revenu</Text>}
+      <TextInput selectTextOnFocus  style={itemStyle.container} value={label} onChangeText={(label) => { setLabel(label) }} />
 
-      { !item.isReccuring &&
+      { !item.isReccuring && Platform.OS === 'android' && 
         <>
           <Text style={itemStyle.header}>Date</Text>
           <Pressable onPress={() => showDatePicker()} style={itemStyle.container}>
