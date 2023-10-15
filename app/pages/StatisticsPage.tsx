@@ -6,21 +6,27 @@ import { MenuBar } from "../components/MenuBar";
 import { useNavigation } from "@react-navigation/native";
 import { date } from "../services/DateAsString";
 import { BarChart } from "react-native-chart-kit";
+import { useEffect, useState } from "react";
 
 export const StatisticsPage = () => {
    
   const navigation = useNavigation();
   const today = new Date();
-  const savings = useSelector( state => Object.values(state.savings).filter( saving => new Date(saving.savingDate).getFullYear() === today.getFullYear() ) );
+  // const savings = useSelector( state => Object.values(state.savings).filter( saving => new Date(saving.savingDate).getFullYear() === today.getFullYear() ) );
+  const savings = useSelector( state => state.savings );
   const allTransactionPerMonth = useSelector( state => state.transactions.allTransactionPerMonth );
-  
 
-  function getSavingsData() {
+  const [totalSaving, setTotalSaving] = useState(0);
+  const [savingData, setSavingData] = useState([]);
+  
+  function getSavings() {
     let data = [];
     let chartLabelsIdx = 0;
     let savingIdx = 0;
+    
+    let filteredSavings = Object.values(savings).filter( saving => new Date(saving.savingDate).getFullYear() === today.getFullYear() )
     while(chartLabelsIdx < 12) {
-      const saving = savings[savingIdx]
+      const saving = filteredSavings[savingIdx]
       if(saving && chartLabelsIdx === Number(date.GetMonthFromKey(saving.key))) {
         data.push(saving.amount.toFixed())
         ++savingIdx
@@ -31,6 +37,12 @@ export const StatisticsPage = () => {
     }
     return data
   }
+
+  useEffect(() => {
+    const savingsData = getSavings();
+    setTotalSaving(savingsData.reduce((p, curr) => Number(curr) + p , 0))
+    setSavingData(savingsData);
+  }, [savings]);
 
   function renderAllTransactions() {
     let content = [];
@@ -81,7 +93,7 @@ export const StatisticsPage = () => {
     labels: ["Jan.", "Fév.", "Mar.", "Avr.", "Mai", "Juin", "Juil.", "Août", "Sep.", "Oct.", "Nov.", "Déc."],
     datasets: [
       {
-        data: getSavingsData()
+        data: savingData
       }
     ]
   };
@@ -89,7 +101,8 @@ export const StatisticsPage = () => {
   return (
       <SafeAreaView style={[styles.content]}>
         <View style={{ flex: 1, justifyContent: "flex-start"}}>
-        <Text style={[styles.white, { fontWeight: "bold", fontSize: 30, textAlign: "center" }]}>{date.GetYearAsString(today)}</Text>
+          <Text style={[styles.white, { fontWeight: "bold", fontSize: 25, textAlign: "center" }]}>{date.GetYearAsString(today)}</Text>
+          <Text style={[styles.white, { fontWeight: "bold", fontSize: 12, textAlign: "center" }]}>Economies: {totalSaving.toFixed()}</Text>
           <View style={ { alignSelf: "center"}} >
             
             <BarChart
