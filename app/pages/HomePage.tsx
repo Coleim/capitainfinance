@@ -26,7 +26,6 @@ export const HomePage = ({ navigation }) => {
     }
     
     useEffect(() => {
-      navigation.navigate('StatisticsPage');
         if (recurringTransactions.length === 0) {
           navigation.navigate('RecurringConfigurationPage');
         }
@@ -50,6 +49,9 @@ export const HomePage = ({ navigation }) => {
             setCurrentSaving(saving);
             setSavingsModalVisible(true);
         }
+
+
+        
         // dispatch(setToday(futureDate));
         // dispatch(resetStore(new Date()));
         // const today = new Date();
@@ -88,9 +90,9 @@ export const HomePage = ({ navigation }) => {
                           <><Text style={modalStyles.modalHeader}>Attention !</Text>
                           <Text style={modalStyles.modalText}>Pour le mois de {date.GetMonthAsString(lastMonth)}, vous êtes en déficit de {currentSaving.toFixed(2)} € </Text></>
                       }
-                      <View style={ {flexDirection: "row", justifyContent: "center"}}>
-                          <Button onPress={ onUserCloseSavingModal } title="Fermer" color="#2ec4b6" />
-                      </View>
+                        <View style={ {flexDirection: "row", justifyContent: "center"}}>
+                            <Button onPress={ onUserCloseSavingModal } title="Fermer" color="#2ec4b6" />
+                        </View>
                       </View>
                   </View>
                 </Modal>

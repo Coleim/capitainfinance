@@ -7,13 +7,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RecurringConfigurationPage } from './app/pages/RecurringConfigurationPage';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { ActivityIndicator, SafeAreaView, View } from "react-native";
+import { ActivityIndicator, SafeAreaView, Text, View } from "react-native";
 import { EditTransactionItemPage } from './app/pages/EditTransactionItemPage';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from './app/states/store';
 import { styles } from './styles';
 import { StatisticsPage } from './app/pages/StatisticsPage';
+
 
 
 const Loading = () => {
@@ -41,7 +42,7 @@ const App = () => {
     <Provider store={store}>
       {/* <PersistGate persistor={persistor} loading={null}> */}
         
-        <SafeAreaProvider style= {{ maxWidth: 600, justifyContent: "center", marginRight: "auto", marginLeft: "auto" }}>
+        <SafeAreaProvider style= {{ maxWidth: 600, justifyContent: "center", marginRight: "auto", marginLeft: "auto", width: "100%" }}>
           <StatusBar style="auto"/>
           { canProceed ?
             <NavigationContainer>

@@ -27,7 +27,6 @@ export function AmountSummary({ navigation }) {
   let fill = (remainingAmountAsPerToday / availableMonthlyAmount) * 100;
 
   useEffect(() => {
-    console.log("Use effect")
       if(availableMonthlyAmount !== 0) {
         const newFill = (remainingAmountAsPerToday / availableMonthlyAmount) * 100;
         circularProgressRef?.current?.animate(newFill, 400, Easing.ease);

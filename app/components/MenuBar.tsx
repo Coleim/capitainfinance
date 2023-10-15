@@ -5,6 +5,8 @@ export function MenuBar(props) {
   
   const isRecurring: boolean = props.recurring;
   const hasBack: boolean = props.hasBack;
+  const showActions: boolean = props.showActions === undefined ? true : props.showActions;
+
   const { navigation } = props;
   
   function openRecurringConfigurationPage(): void {
@@ -38,10 +40,12 @@ export function MenuBar(props) {
         }
       </View>
 
+      { showActions &&
       <View style={{ flexDirection: "row", marginLeft: "auto", marginRight: "auto", marginBottom: -20 }}>
         <Ionicons name="md-add-circle" size={70} style={{zIndex: 3, bottom: 25 }} color="#1ee9a4" onPress={ () => addIncome() } />
         <Ionicons name="md-remove-circle" size={70} color="#e91e63" style={{zIndex: 3, bottom: 25 }} onPress={ () => addExpense() } />
       </View>
+      }
 
       <View style={{ flex: 1 }}>
         { !isRecurring &&

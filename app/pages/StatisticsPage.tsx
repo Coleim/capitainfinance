@@ -68,7 +68,7 @@ export const StatisticsPage = () => {
     labelColor: (opacity = 1) => `rgba(0, 0, 0, 1)`,
     paddingLeft: 0,
     paddingRight: 0,
-    barPercentage: 0.8,
+    barPercentage: 0.5,
   };
 
   const graphStyle = {
@@ -78,7 +78,7 @@ export const StatisticsPage = () => {
   };
 
   const chartData = {
-    labels: ["Jan.", "Fév.", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Sept.", "Oct.", "Nov.", "Déc."],
+    labels: ["Jan.", "Fév.", "Mar.", "Avr.", "Mai", "Juin", "Juil.", "Août", "Sep.", "Oct.", "Nov.", "Déc."],
     datasets: [
       {
         data: getSavingsData()
@@ -88,11 +88,12 @@ export const StatisticsPage = () => {
 
   return (
       <SafeAreaView style={[styles.content]}>
-          <Text style={[styles.white, { fontWeight: "bold", fontSize: 30, textAlign: "center" }]}>{date.GetYearAsString(today)}</Text>
+        <View style={{ flex: 1, justifyContent: "flex-start"}}>
+        <Text style={[styles.white, { fontWeight: "bold", fontSize: 30, textAlign: "center" }]}>{date.GetYearAsString(today)}</Text>
           <View style={ { alignSelf: "center"}} >
             
             <BarChart
-              width={Math.min(Dimensions.get("window").width - 40, 560)}
+              width={Math.min(Dimensions.get("window").width - 20, 560)}
               height={220}
               chartConfig={chartConfig}
               style={graphStyle}
@@ -107,7 +108,9 @@ export const StatisticsPage = () => {
             />
 
           </View>
-          <MenuBar navigation={navigation} hasBack={true}></MenuBar>
+        </View>
+          
+          <MenuBar navigation={navigation} hasBack={true} showActions={false}></MenuBar>
       </SafeAreaView>
   );
 }

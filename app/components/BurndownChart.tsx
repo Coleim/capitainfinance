@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 
 
 export function BurndownChart() {
+  console.log("BurndownChart")
     
   const theoriticalAvailableAmountPerDay = useSelector( state => state.transactions.theoriticalAvailableAmountPerDay );
   const realAvailableAmountPerDay = useSelector( state => state.transactions.realAvailableAmountPerDay );
