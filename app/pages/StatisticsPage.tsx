@@ -22,7 +22,7 @@ export const StatisticsPage = () => {
     while(chartLabelsIdx < 12) {
       const saving = savings[savingIdx]
       if(saving && chartLabelsIdx === Number(date.GetMonthFromKey(saving.key))) {
-        data.push(saving.amount)
+        data.push(saving.amount.toFixed())
         ++savingIdx
       } else {
         data.push(0)
@@ -110,7 +110,7 @@ export const StatisticsPage = () => {
           </View>
         </View>
           
-          <MenuBar navigation={navigation} hasBack={true} showActions={false}></MenuBar>
+        <MenuBar navigation={navigation} hasBack={true} showActions={false} showRecurring={false}></MenuBar>
       </SafeAreaView>
   );
 }

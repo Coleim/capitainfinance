@@ -6,6 +6,7 @@ export function MenuBar(props) {
   const isRecurring: boolean = props.recurring;
   const hasBack: boolean = props.hasBack;
   const showActions: boolean = props.showActions === undefined ? true : props.showActions;
+  const showRecurring: boolean = props.showRecurring === undefined ? true : props.showRecurring;
 
   const { navigation } = props;
   
@@ -47,15 +48,19 @@ export function MenuBar(props) {
       </View>
       }
 
-      <View style={{ flex: 1 }}>
-        { !isRecurring &&
-          <Pressable style={ { marginLeft: "auto", flexDirection: "column", justifyContent: "center", alignItems: "center", alignContent: "center" }} onPress={ () => openRecurringConfigurationPage() }>
-              <Ionicons name="md-sync-circle-outline" size={15} color="#fff" style={{zIndex: 3, height: 15, marginBottom: 5 }} />
-              <Text style={ { color: "#fff", marginRight: 5, fontSize: 10} }>Transactions</Text>
-              <Text style={ { color: "#fff", marginRight: 5, fontSize: 10} }>récurrentes</Text>
-            </Pressable >
-        }
-      </View>
+
+      { showRecurring &&
+        <View style={{ flex: 1 }}>
+          { !isRecurring &&
+            <Pressable style={ { marginLeft: "auto", flexDirection: "column", justifyContent: "center", alignItems: "center", alignContent: "center" }} onPress={ () => openRecurringConfigurationPage() }>
+                <Ionicons name="md-sync-circle-outline" size={15} color="#fff" style={{zIndex: 3, height: 15, marginBottom: 5 }} />
+                <Text style={ { color: "#fff", marginRight: 5, fontSize: 10} }>Transactions</Text>
+                <Text style={ { color: "#fff", marginRight: 5, fontSize: 10} }>récurrentes</Text>
+              </Pressable >
+          }
+        </View>
+      
+      }
 
     </View>
   
