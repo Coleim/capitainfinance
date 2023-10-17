@@ -60,6 +60,7 @@ export const StatisticsPage = () => {
         transMap.set(transaction.category, Number(transaction.amount))
       }
     })
+
     return transMap;
   }
 
@@ -68,9 +69,14 @@ export const StatisticsPage = () => {
     const transMap = getCurrentMonthTransaction();
     let labels = []
     let data = []
-    transMap.forEach( (value, key) => {
+    var mapAsc = new Map([...transMap.entries()].sort((a,b) => {
+      if(a>b) return -1;
+      if(a<b) return 1;
+      return 0;
+    }));
+    mapAsc.forEach( (value, key) => {
       labels.push(key);
-      data.push(value);
+      data.push(value*-1);
     })
     setCategoriesLabel(labels)
     setCategoriesData(data)
