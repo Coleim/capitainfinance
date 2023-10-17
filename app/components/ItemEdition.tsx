@@ -171,20 +171,21 @@ export function ItemEdition(props) {
     <View style={{ paddingTop: 20 }}  >
 
       <View style={{ flexDirection: "row" }}>
-      <Text style={itemStyle.header}>Montant</Text>
         {item.transaction_id && <Pressable style={{ marginLeft: "auto", marginRight: 10 }} onPress={() => openConfirmModal()} >
           <Text style={{ color: "#ff0054" }}>Supprimer</Text>
         </Pressable>}
       </View>
-      <TextInput autoFocus selectTextOnFocus keyboardType={'numeric'} 
+      
+      {isExpense ? <Text style={itemStyle.header}>Nom de la dépense</Text> : <Text style={itemStyle.header}>Nom du revenu</Text>}
+      <TextInput selectTextOnFocus autoFocus style={itemStyle.container} value={label} onChangeText={(label) => { setLabel(label) }} />
+
+      <Text style={itemStyle.header}>Montant</Text>
+      <TextInput  selectTextOnFocus keyboardType={'numeric'} 
         style={[itemStyle.container]} 
         value={amountStr}
         onChangeText={(amount) => { setAmountStr(amount) }}
         onBlur={() => validateAmountNumber()}
       />
-      
-      {isExpense ? <Text style={itemStyle.header}>Nom de la dépense</Text> : <Text style={itemStyle.header}>Nom du revenu</Text>}
-      <TextInput selectTextOnFocus  style={itemStyle.container} value={label} onChangeText={(label) => { setLabel(label) }} />
 
       { !item.isReccuring && Platform.OS === 'android' && 
         <>

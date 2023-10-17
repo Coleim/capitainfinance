@@ -12,12 +12,17 @@ export const StatisticsPage = () => {
    
   const navigation = useNavigation();
   const today = new Date();
+  let lastMonth = new Date();
+  lastMonth.setDate(1);
+  lastMonth.setMonth(lastMonth.getMonth()-4);
   // const savings = useSelector( state => Object.values(state.savings).filter( saving => new Date(saving.savingDate).getFullYear() === today.getFullYear() ) );
   const savings = useSelector( state => state.savings );
   const allTransactionPerMonth = useSelector( state => state.transactions.allTransactionPerMonth );
 
   const [totalSaving, setTotalSaving] = useState(0);
   const [savingData, setSavingData] = useState([]);
+  const [categoriesLabel, setCategoriesLabel] = useState([]);
+  const [categoriesData, setCategoriesData] = useState([]);
   
   function getSavings() {
     let data = [];
@@ -38,8 +43,37 @@ export const StatisticsPage = () => {
     return data
   }
 
+  function getCurrentMonthTransaction() {
+    const currentMonthKey = date.GetMonthKey(lastMonth);
+    console.log(currentMonthKey)
+    const currMonthTransations = allTransactionPerMonth[currentMonthKey];
+    currMonthTransations.dailyTransactions;
+    currMonthTransations.recurringTransactions;
+    console.log(currMonthTransations.dailyTransactions)
+    console.log(currMonthTransations.recurringTransactions)
+    let transMap = new Map();
+    currMonthTransations.dailyTransactions.forEach( transaction => {
+      if(transMap.has(transaction.category)) {
+        let newAmount = Number(transMap.get(transaction.category)) + Number(transaction.amount);
+        transMap.set(transaction.category, newAmount)
+      } else {
+        transMap.set(transaction.category, Number(transaction.amount))
+      }
+    })
+    return transMap;
+  }
+
   useEffect(() => {
     const savingsData = getSavings();
+    const transMap = getCurrentMonthTransaction();
+    let labels = []
+    let data = []
+    transMap.forEach( (value, key) => {
+      labels.push(key);
+      data.push(value);
+    })
+    setCategoriesLabel(labels)
+    setCategoriesData(data)
     setTotalSaving(savingsData.reduce((p, curr) => Number(curr) + p , 0))
     setSavingData(savingsData);
   }, [savings]);
@@ -98,6 +132,17 @@ export const StatisticsPage = () => {
     ]
   };
 
+  const chartDataPerCategories = {
+    labels: categoriesLabel,
+    datasets: [
+      {
+        data: categoriesData
+      }
+    ]
+  };
+
+
+
   return (
       <SafeAreaView style={[styles.content]}>
         <View style={{ flex: 1, justifyContent: "flex-start"}}>
@@ -119,7 +164,32 @@ export const StatisticsPage = () => {
               yAxisSuffix=""
               data={chartData}
             />
-
+          </View>
+          <View>
+            <Text style={[styles.white, { fontWeight: "bold", fontSize: 25, textAlign: "center" }]}> {'<-'} {date.GetMonthAsString(lastMonth)} {'->'}</Text>
+          </View>
+          <View style={ { alignSelf: "center"}} >
+            <BarChart
+              width={250}
+              height={Math.min(Dimensions.get("window").width - 20, 560)}
+              chartConfig={chartConfig}
+              verticalLabelRotation={270}
+              style={{
+                marginTop: -20,
+                transform: [{ rotate: "90deg" }],
+                paddingLeft: 0,
+                paddingRight: 10,
+                borderRadius: 5                
+              }}
+              xLabelsOffset={40}
+              withInnerLines={false}
+              showValuesOnTopOfBars={true}
+              fromZero={true}
+              showBarTops={false}
+              yAxisLabel=""
+              yAxisSuffix=""
+              data={chartDataPerCategories}
+            />
           </View>
         </View>
           
