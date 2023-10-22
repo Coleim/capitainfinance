@@ -48,11 +48,11 @@ export const StatisticsPage = () => {
 
   function getSavings() {
     let data = [];
-    let chartLabelsIdx = 0;
+    let chartLabelsIdx = 1;
     let savingIdx = 0;
 
     let filteredSavings = Object.values(savings).filter(saving => new Date(saving.savingDate).getFullYear() === today.getFullYear())
-    while (chartLabelsIdx < 12) {
+    while (chartLabelsIdx <= 12) {
       const saving = filteredSavings[savingIdx]
       if (saving && chartLabelsIdx === Number(date.GetMonthFromKey(saving.key))) {
         data.push(Number(saving.amount.toFixed()))
